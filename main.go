@@ -48,7 +48,6 @@ func loadPersisten() *persistence.Repositories {
 	if err != nil {
 		panic(any(err))
 	}
-	defer repo.Close()
 
 	return repo
 }

@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"time"
+	"tsv-golang/internal/repository"
 	"tsv-golang/pkg/env"
 
 	"gorm.io/driver/mysql"
@@ -13,7 +14,8 @@ import (
 )
 
 type Repositories struct {
-	DB *gorm.DB
+	DB   *gorm.DB
+	User repository.UserRepositoryInterface
 }
 
 func NewRepositories() (*Repositories, error) {
@@ -33,19 +35,18 @@ func NewRepositories() (*Repositories, error) {
 			Colorful:                  true,             // Disable color
 		},
 	)
-
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: newLogger,
 	})
 	if err != nil {
-		return &Repositories{}, nil
+		return nil, fmt.Errorf("failed to connect to DB: %w", err)
 	}
-	// set debug query where != production env
 	if env.Env().IsModeDebug() {
 		db = db.Debug()
 	}
 	return &Repositories{
-		DB: db,
+		DB:   db,
+		User: repository.UserRepositoryInit(db),
 	}, nil
 }
 

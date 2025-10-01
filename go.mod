@@ -9,6 +9,7 @@ require (
 	github.com/joho/godotenv v1.4.0
 	gorm.io/driver/mysql v1.4.5
 	gorm.io/gorm v1.30.0
+	github.com/mitchellh/mapstructure v1.5.0
 )
 
 require (
