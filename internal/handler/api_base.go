@@ -1,10 +1,13 @@
 package handler
 
 import (
+	"encoding/json"
 	"net/http"
 	"tsv-golang/pkg/error_common"
+	"tsv-golang/pkg/log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mitchellh/mapstructure"
 )
 
 type ResponseSuccessStruct struct {
@@ -63,4 +66,14 @@ func ResponseFailWithData(context *gin.Context, errorCode int, data interface{})
 
 func Response(context *gin.Context, res any, httpCode int) {
 	context.JSON(httpCode, res)
+}
+
+func LogInfo(c *gin.Context, content string, params interface{}) {
+	paramMap := make(map[string]interface{})
+	paramMap["TrackID"], _ = c.Get("TrackID")
+	var paramTemp interface{}
+	_ = mapstructure.Decode(params, &paramTemp)
+	paramMap["Data"] = paramTemp
+	paramBytes, _ := json.Marshal(paramMap)
+	log.Info(content, string(paramBytes))
 }
