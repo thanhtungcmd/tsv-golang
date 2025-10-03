@@ -7,11 +7,18 @@ import (
 	"os"
 	"time"
 	"tsv-golang/internal/filter"
+	"tsv-golang/internal/graph"
 	"tsv-golang/internal/persistence"
 	"tsv-golang/internal/route"
 
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/handler/extension"
+	"github.com/99designs/gqlgen/graphql/handler/lru"
+	"github.com/99designs/gqlgen/graphql/handler/transport"
+	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"github.com/vektah/gqlparser/v2/ast"
 )
 
 func main() {
@@ -27,6 +34,8 @@ func main() {
 	apiV1.Use(filter.TrackIdFilter)
 	apiV1.Use(filter.AuthFilter)
 	route.HandleApiV1(apiV1, *repo)
+	router.POST("/query", graphqlHandler())
+	router.GET("/", playgroundHandler())
 
 	// server
 	s := &http.Server{
@@ -61,4 +70,35 @@ func loadEnv() {
 	}
 
 	gin.SetMode(os.Getenv("GIN_MODE"))
+}
+
+func graphqlHandler() gin.HandlerFunc {
+	// NewExecutableSchema and Config are in the generated.go file
+	// Resolver is in the resolver.go file
+	h := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+
+	// Server setup:
+	h.AddTransport(transport.Options{})
+	h.AddTransport(transport.GET{})
+	h.AddTransport(transport.POST{})
+
+	h.SetQueryCache(lru.New[*ast.QueryDocument](1000))
+
+	h.Use(extension.Introspection{})
+	h.Use(extension.AutomaticPersistedQuery{
+		Cache: lru.New[string](100),
+	})
+
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
+}
+
+// Defining the Playground handler
+func playgroundHandler() gin.HandlerFunc {
+	h := playground.Handler("GraphQL", "/query")
+
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
 }
