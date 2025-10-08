@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"tsv-golang/internal/dto"
 	"tsv-golang/internal/persistence"
 
 	"github.com/gin-gonic/gin"
@@ -18,14 +17,7 @@ func ApiUserHandlerInit(repo persistence.Repositories) *ApiUserHandler {
 }
 
 func (h *ApiUserHandler) GetList(c *gin.Context) {
-	params := &dto.GetListUserRequest{}
-	_ = c.ShouldBindQuery(&params)
-
-	LogInfo(c, "UserGetListRequest:", params)
-
-	data := h.repo.User.GetList(params)
-
-	LogInfo(c, "UserGetListResponse:", len(data))
+	data := "123"
 
 	ResponseSuccess(c, data)
 	return

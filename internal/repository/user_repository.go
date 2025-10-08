@@ -1,8 +1,7 @@
 package repository
 
 import (
-	"tsv-golang/internal/dto"
-	"tsv-golang/internal/entity"
+	"tsv-golang/internal/graph/model"
 
 	"gorm.io/gorm"
 )
@@ -12,7 +11,8 @@ type UserRepository struct {
 }
 
 type UserRepositoryInterface interface {
-	GetList(param *dto.GetListUserRequest) []*entity.User
+	GetList(param *model.ListUsersRequest) []*model.User
+	CreateAndReturn(model *model.User) (*model.User, error)
 }
 
 func UserRepositoryInit(db *gorm.DB) *UserRepository {
@@ -23,19 +23,30 @@ func UserRepositoryInit(db *gorm.DB) *UserRepository {
 
 var _ UserRepositoryInterface = &UserRepository{}
 
-func (repo UserRepository) GetList(param *dto.GetListUserRequest) []*entity.User {
-	result := make([]*entity.User, 0)
-	query := repo.db.Table("tb_user").Select("*")
-	if param.Id != "" {
-		query = query.Where("id = ?", param.Id)
+var defaultOffset = 1
+var defaultLimit = 20
+
+func (repo UserRepository) CreateAndReturn(model *model.User) (*model.User, error) {
+	result := repo.db.Table("balheh.tb_user").Create(&model)
+	if result.Error != nil {
+		return nil, result.Error
 	}
-	if param.Page == 0 {
-		param.Page = 1
+	return model, nil
+}
+
+func (repo UserRepository) GetList(param *model.ListUsersRequest) []*model.User {
+	result := make([]*model.User, 0)
+	query := repo.db.Table("balheh.tb_user").Select("*")
+	if param.ID != nil {
+		query = query.Where("id = ?", param.ID)
 	}
-	if param.Limit == 0 {
-		param.Limit = 20
+	if param.Offset != nil {
+		param.Offset = &defaultOffset
 	}
-	query.Offset(int(param.Page-1) * int(param.Limit)).Limit(int(param.Limit)).Order("updated_at desc")
+	if param.Limit != nil {
+		param.Limit = &defaultLimit
+	}
+	query.Offset(*param.Offset).Limit(*param.Limit).Order("updated_at desc")
 	query = query.Find(&result)
 	return result
 }

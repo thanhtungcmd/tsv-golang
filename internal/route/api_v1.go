@@ -18,12 +18,14 @@ func HandleApiV1(route *gin.RouterGroup, repo persistence.Repositories) {
 	userHandler := handler.ApiUserHandlerInit(repo)
 	route.GET("users/get-list", userHandler.GetList)
 
-	route.POST("/query", graphqlHandler())
+	route.POST("/query", graphqlHandler(repo))
 	route.GET("/", playgroundHandler())
 }
 
-func graphqlHandler() gin.HandlerFunc {
-	h := handlerGraph.New(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+func graphqlHandler(repo persistence.Repositories) gin.HandlerFunc {
+	h := handlerGraph.New(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{
+		&repo,
+	}}))
 
 	h.AddTransport(transport.Options{})
 	h.AddTransport(transport.GET{})
@@ -42,7 +44,7 @@ func graphqlHandler() gin.HandlerFunc {
 }
 
 func playgroundHandler() gin.HandlerFunc {
-	h := playground.Handler("GraphQL", "/query")
+	h := playground.Handler("GraphQL", "/api/v1/query")
 
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)

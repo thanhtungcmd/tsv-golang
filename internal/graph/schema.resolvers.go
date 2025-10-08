@@ -8,11 +8,24 @@ import (
 	"context"
 	"fmt"
 	"tsv-golang/internal/graph/model"
+
+	"github.com/mitchellh/mapstructure"
 )
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
+	user := &model.User{}
+	err := mapstructure.Decode(input, &user)
+	if err != nil {
+		return nil, err
+	}
+
+	data, err := r.Repositories.User.CreateAndReturn(user)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }
 
 // ListUsers is the resolver for the listUsers field.
