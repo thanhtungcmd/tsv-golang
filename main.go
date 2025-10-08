@@ -25,7 +25,7 @@ func main() {
 	router := gin.Default()
 	apiV1 := router.Group("/api/v1")
 	apiV1.Use(filter.TrackIdFilter)
-	//apiV1.Use(filter.AuthFilter)
+	apiV1.Use(filter.AuthFilter)
 	route.HandleApiV1(apiV1, *repo)
 
 	// server

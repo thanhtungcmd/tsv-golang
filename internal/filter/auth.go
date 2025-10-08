@@ -15,8 +15,9 @@ import (
 )
 
 var skipURLs = []string{
-	"/api/v1/users/get-list",
-	"auth/login",
+	"/auth/login",
+	"/api/v1/",
+	"/api/v1/query",
 }
 
 var (
