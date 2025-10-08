@@ -10,6 +10,7 @@ import (
 	"tsv-golang/internal/graph/model"
 
 	"github.com/mitchellh/mapstructure"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // CreateUser is the resolver for the createUser field.
@@ -19,12 +20,15 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput
 	if err != nil {
 		return nil, err
 	}
-
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
+	user.Password = string(hashedPassword)
 	data, err := r.Repositories.User.CreateAndReturn(user)
 	if err != nil {
 		return nil, err
 	}
-
 	return data, nil
 }
 

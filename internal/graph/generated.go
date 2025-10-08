@@ -827,9 +827,9 @@ func (ec *executionContext) _User_password(ctx context.Context, field graphql.Co
 			return obj.Password, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		ec.marshalNString2string,
 		true,
-		false,
+		true,
 	)
 }
 
@@ -2573,7 +2573,7 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj any
 			it.UserName = data
 		case "password":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2803,6 +2803,9 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "password":
 			out.Values[i] = ec._User_password(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "email":
 			out.Values[i] = ec._User_email(ctx, field, obj)
 		case "authority":

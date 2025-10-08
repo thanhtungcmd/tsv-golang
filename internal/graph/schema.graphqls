@@ -6,7 +6,7 @@ type User {
     company_code: String!
     id: String!
     user_name: String!
-    password: String
+    password: String!
     email: String
     authority: String
     use_yn: String!
@@ -20,7 +20,7 @@ input UserInput {
     company_code: String!
     id: String!
     user_name: String!
-    password: String
+    password: String!
     email: String
     authority: String
     use_yn: String
