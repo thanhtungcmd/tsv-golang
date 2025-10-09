@@ -2,6 +2,7 @@ package route
 
 import (
 	"tsv-golang/internal/graph"
+	"tsv-golang/internal/permission"
 	"tsv-golang/internal/repository"
 	service2 "tsv-golang/internal/service"
 
@@ -25,10 +26,13 @@ func HandleApiV1(route *gin.RouterGroup, repo repository.Repositories) {
 func graphqlHandler(repo repository.Repositories) gin.HandlerFunc {
 	service := service2.NewService(&repo)
 
-	h := handlerGraph.New(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{
+	cfg := graph.Config{Resolvers: &graph.Resolver{
 		Repositories: &repo,
 		Service:      service,
-	}}))
+	}}
+	cfg.Directives.HasPermission = permission.HasPermission(&repo)
+
+	h := handlerGraph.New(graph.NewExecutableSchema(cfg))
 
 	h.AddTransport(transport.Options{})
 	h.AddTransport(transport.GET{})

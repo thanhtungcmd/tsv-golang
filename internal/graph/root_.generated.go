@@ -40,6 +40,7 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
+	HasPermission func(ctx context.Context, obj any, next graphql.Resolver, action string) (res any, err error)
 }
 
 type ComplexityRoot struct {
