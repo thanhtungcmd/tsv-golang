@@ -53,16 +53,19 @@ func (repo UserRepository) Login(username string) (*model.User, error) {
 func (repo UserRepository) GetList(param *model.ListUsersRequest) []*model.User {
 	result := make([]*model.User, 0)
 	query := repo.db.Table("balheh.tb_user").Select("*")
-	if param.ID != nil {
-		query = query.Where("id = ?", param.ID)
+	if param != nil {
+		if param.ID != nil {
+			query = query.Where("id = ?", param.ID)
+		}
+		if param.Offset != nil {
+			param.Offset = &defaultOffset
+		}
+		if param.Limit != nil {
+			param.Limit = &defaultLimit
+		}
+		query.Offset(*param.Offset).Limit(*param.Limit)
 	}
-	if param.Offset != nil {
-		param.Offset = &defaultOffset
-	}
-	if param.Limit != nil {
-		param.Limit = &defaultLimit
-	}
-	query.Offset(*param.Offset).Limit(*param.Limit).Order("updated_at desc")
+	query.Order("updated_at desc")
 	query = query.Find(&result)
 	return result
 }

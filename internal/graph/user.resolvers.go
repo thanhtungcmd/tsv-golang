@@ -17,7 +17,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput
 
 // ListUsers is the resolver for the listUsers field.
 func (r *queryResolver) ListUsers(ctx context.Context, request *model.ListUsersRequest) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented: ListUsers - listUsers"))
+	return r.Service.UserService.ListUsers(request)
 }
 
 // GetUser is the resolver for the getUser field.
