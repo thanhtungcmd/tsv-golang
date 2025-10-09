@@ -15,8 +15,8 @@ import (
 )
 
 func HandleApiV1(route *gin.RouterGroup, repo persistence.Repositories) {
-	userHandler := handler.ApiUserHandlerInit(repo)
-	route.GET("users/get-list", userHandler.GetList)
+	authHandler := handler.ApiAuthHandlerInit(repo)
+	route.POST("auth/login", authHandler.Login)
 
 	route.POST("/query", graphqlHandler(repo))
 	route.GET("/", playgroundHandler())

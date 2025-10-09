@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"tsv-golang/internal/graph/model"
 
 	"gorm.io/gorm"
@@ -13,6 +14,7 @@ type UserRepository struct {
 type UserRepositoryInterface interface {
 	GetList(param *model.ListUsersRequest) []*model.User
 	CreateAndReturn(model *model.User) (*model.User, error)
+	Login(username string) (*model.User, error)
 }
 
 func UserRepositoryInit(db *gorm.DB) *UserRepository {
@@ -32,6 +34,17 @@ func (repo UserRepository) CreateAndReturn(model *model.User) (*model.User, erro
 		return nil, result.Error
 	}
 	return model, nil
+}
+
+func (repo UserRepository) Login(username string) (*model.User, error) {
+	var user model.User
+	if err := repo.db.Table("balheh.tb_user").Where("user_name = ?", username).First(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("user not found")
+		}
+		return nil, err
+	}
+	return &user, nil
 }
 
 func (repo UserRepository) GetList(param *model.ListUsersRequest) []*model.User {

@@ -15,9 +15,8 @@ import (
 )
 
 var skipURLs = []string{
-	"/auth/login",
+	"/api/v1/auth/login",
 	"/api/v1/",
-	"/api/v1/query",
 }
 
 var (
@@ -51,7 +50,7 @@ func AuthFilter(c *gin.Context) {
 
 func tokenValid(c *gin.Context, secretKey string) error {
 	tokenString := extractToken(c)
-	tokens, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	tokens, err := jwt.ParseWithClaims(tokenString, jwt.MapClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
@@ -68,8 +67,12 @@ func tokenValid(c *gin.Context, secretKey string) error {
 	if !ok || typ != "JWT" {
 		return AuthInvalidTyp
 	}
-	exp, ok := tokens.Header["exp"].(int64)
-	if !ok || time.Now().Unix() > exp {
+	claims, ok := tokens.Claims.(jwt.MapClaims)
+	if !ok || !tokens.Valid {
+		return AuthInvalidExp
+	}
+	exp, ok := claims["exp"].(float64)
+	if !ok || time.Now().Unix() > int64(exp) {
 		return AuthInvalidExp
 	}
 
