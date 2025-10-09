@@ -5,14 +5,14 @@ schema:
 # Where should the generated server code go?
 exec:
   package: graph
-  layout: single-file # Only other option is "follow-schema," ie multi-file.
+  layout: follow-schema # Only other option is "follow-schema," ie multi-file.
 
   # Only for single-file layout:
   filename: internal/graph/generated.go
 
   # Only for follow-schema layout:
-  # dir: graph
-  # filename_template: "{name}.generated.go"
+  dir: internal/graph
+  filename_template: "{name}.generated.go"
 
   # Optional: Maximum number of goroutines in concurrency to use per child resolvers(default: unlimited)
   # worker_limit: 1000
@@ -50,7 +50,7 @@ resolver:
   # Optional: Pass in a path to a new gotpl template to use for generating resolvers
   # resolver_template: [your/path/resolver.gotpl]
   # Optional: turn on to avoid rewriting existing resolver(s) when generating
-  preserve_resolver: true
+  preserve_resolver: false
 
 # Optional: turn on use ` + "`" + `gqlgen:"fieldName"` + "`" + ` tags in your models
 # struct_tag: json
