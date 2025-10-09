@@ -2,11 +2,9 @@ package repository
 
 import (
 	"errors"
-	"math/rand"
-	"time"
 	"tsv-golang/internal/graph/model"
+	"tsv-golang/pkg/ulid"
 
-	"github.com/oklog/ulid/v2"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -33,9 +31,7 @@ var defaultOffset = 1
 var defaultLimit = 20
 
 func (repo UserRepository) CreateAndReturn(model *model.User) (*model.User, error) {
-	entropy := ulid.Monotonic(rand.New(rand.NewSource(time.Now().UnixNano())), 0)
-	id := ulid.MustNew(ulid.Timestamp(time.Now()), entropy)
-	model.ID = id.String()
+	model.ID = ulid.NewULID()
 	result := repo.db.Table("balheh.tb_user").Clauses(clause.Returning{}).Create(&model)
 	if result.Error != nil {
 		return nil, result.Error
