@@ -63,7 +63,7 @@ type ComplexityRoot struct {
 		UpdatedAt   func(childComplexity int) int
 		UpdatedUser func(childComplexity int) int
 		UseYn       func(childComplexity int) int
-		UserName    func(childComplexity int) int
+		Username    func(childComplexity int) int
 	}
 }
 
@@ -192,12 +192,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.User.UseYn(childComplexity), true
 
-	case "User.user_name":
-		if e.complexity.User.UserName == nil {
+	case "User.username":
+		if e.complexity.User.Username == nil {
 			break
 		}
 
-		return e.complexity.User.UserName(childComplexity), true
+		return e.complexity.User.Username(childComplexity), true
 
 	}
 	return 0, false

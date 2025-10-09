@@ -15,9 +15,9 @@ type Query struct {
 }
 
 type User struct {
-	CompanyCode string  `json:"company_code"`
 	ID          string  `json:"id"`
-	UserName    string  `json:"user_name"`
+	CompanyCode string  `json:"company_code"`
+	Username    string  `json:"username"`
 	Password    string  `json:"password"`
 	Email       *string `json:"email,omitempty"`
 	Authority   *string `json:"authority,omitempty"`
@@ -30,8 +30,7 @@ type User struct {
 
 type UserInput struct {
 	CompanyCode string  `json:"company_code"`
-	ID          string  `json:"id"`
-	UserName    string  `json:"user_name"`
+	Username    string  `json:"username"`
 	Password    string  `json:"password"`
 	Email       *string `json:"email,omitempty"`
 	Authority   *string `json:"authority,omitempty"`

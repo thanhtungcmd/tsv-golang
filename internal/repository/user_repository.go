@@ -2,9 +2,13 @@ package repository
 
 import (
 	"errors"
+	"math/rand"
+	"time"
 	"tsv-golang/internal/graph/model"
 
+	"github.com/oklog/ulid/v2"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type UserRepository struct {
@@ -29,7 +33,10 @@ var defaultOffset = 1
 var defaultLimit = 20
 
 func (repo UserRepository) CreateAndReturn(model *model.User) (*model.User, error) {
-	result := repo.db.Table("balheh.tb_user").Create(&model)
+	entropy := ulid.Monotonic(rand.New(rand.NewSource(time.Now().UnixNano())), 0)
+	id := ulid.MustNew(ulid.Timestamp(time.Now()), entropy)
+	model.ID = id.String()
+	result := repo.db.Table("balheh.tb_user").Clauses(clause.Returning{}).Create(&model)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -38,7 +45,7 @@ func (repo UserRepository) CreateAndReturn(model *model.User) (*model.User, erro
 
 func (repo UserRepository) Login(username string) (*model.User, error) {
 	var user model.User
-	if err := repo.db.Table("balheh.tb_user").Where("user_name = ?", username).First(&user).Error; err != nil {
+	if err := repo.db.Table("balheh.tb_user").Where("username = ?", username).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("user not found")
 		}

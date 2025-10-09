@@ -3,9 +3,9 @@
 # https://gqlgen.com/getting-started/
 
 type User {
-    company_code: String!
     id: String!
-    user_name: String!
+    company_code: String!
+    username: String!
     password: String!
     email: String
     authority: String
@@ -18,8 +18,7 @@ type User {
 
 input UserInput {
     company_code: String!
-    id: String!
-    user_name: String!
+    username: String!
     password: String!
     email: String
     authority: String

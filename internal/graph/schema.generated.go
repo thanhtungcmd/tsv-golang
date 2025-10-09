@@ -109,12 +109,12 @@ func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "company_code":
-				return ec.fieldContext_User_company_code(ctx, field)
 			case "id":
 				return ec.fieldContext_User_id(ctx, field)
-			case "user_name":
-				return ec.fieldContext_User_user_name(ctx, field)
+			case "company_code":
+				return ec.fieldContext_User_company_code(ctx, field)
+			case "username":
+				return ec.fieldContext_User_username(ctx, field)
 			case "password":
 				return ec.fieldContext_User_password(ctx, field)
 			case "email":
@@ -174,12 +174,12 @@ func (ec *executionContext) fieldContext_Query_listUsers(ctx context.Context, fi
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "company_code":
-				return ec.fieldContext_User_company_code(ctx, field)
 			case "id":
 				return ec.fieldContext_User_id(ctx, field)
-			case "user_name":
-				return ec.fieldContext_User_user_name(ctx, field)
+			case "company_code":
+				return ec.fieldContext_User_company_code(ctx, field)
+			case "username":
+				return ec.fieldContext_User_username(ctx, field)
 			case "password":
 				return ec.fieldContext_User_password(ctx, field)
 			case "email":
@@ -239,12 +239,12 @@ func (ec *executionContext) fieldContext_Query_getUser(ctx context.Context, fiel
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "company_code":
-				return ec.fieldContext_User_company_code(ctx, field)
 			case "id":
 				return ec.fieldContext_User_id(ctx, field)
-			case "user_name":
-				return ec.fieldContext_User_user_name(ctx, field)
+			case "company_code":
+				return ec.fieldContext_User_company_code(ctx, field)
+			case "username":
+				return ec.fieldContext_User_username(ctx, field)
 			case "password":
 				return ec.fieldContext_User_password(ctx, field)
 			case "email":
