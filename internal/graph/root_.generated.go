@@ -48,8 +48,8 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		GetUser   func(childComplexity int, companyCode string, id string) int
-		ListUsers func(childComplexity int, request *model.ListUsersRequest) int
+		GetUserByID func(childComplexity int, id string) int
+		ListUsers   func(childComplexity int, request *model.ListUsersRequest) int
 	}
 
 	User struct {
@@ -98,17 +98,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(model.UserInput)), true
 
-	case "Query.getUser":
-		if e.complexity.Query.GetUser == nil {
+	case "Query.getUserById":
+		if e.complexity.Query.GetUserByID == nil {
 			break
 		}
 
-		args, err := ec.field_Query_getUser_args(ctx, rawArgs)
+		args, err := ec.field_Query_getUserById_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.GetUser(childComplexity, args["company_code"].(string), args["id"].(string)), true
+		return e.complexity.Query.GetUserByID(childComplexity, args["id"].(string)), true
 
 	case "Query.listUsers":
 		if e.complexity.Query.ListUsers == nil {

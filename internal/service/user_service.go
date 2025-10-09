@@ -15,6 +15,7 @@ type UserService struct {
 type UserServiceInterface interface {
 	CreateUser(input model.UserInput) (*model.User, error)
 	ListUsers(request *model.ListUsersRequest) ([]*model.User, error)
+	GetUserByID(id string) (*model.User, error)
 }
 
 func UserServiceInit(repo *repository.Repositories) *UserService {
@@ -45,5 +46,10 @@ func (u *UserService) CreateUser(input model.UserInput) (*model.User, error) {
 
 func (u *UserService) ListUsers(request *model.ListUsersRequest) ([]*model.User, error) {
 	result := u.repo.User.GetList(request)
+	return result, nil
+}
+
+func (u *UserService) GetUserByID(id string) (*model.User, error) {
+	result := u.repo.User.FindById(id)
 	return result, nil
 }

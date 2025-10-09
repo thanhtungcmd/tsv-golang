@@ -17,6 +17,7 @@ type UserRepositoryInterface interface {
 	GetList(param *model.ListUsersRequest) []*model.User
 	CreateAndReturn(model *model.User) (*model.User, error)
 	Login(username string) (*model.User, error)
+	FindById(id string) *model.User
 }
 
 func UserRepositoryInit(db *gorm.DB) *UserRepository {
@@ -63,9 +64,20 @@ func (repo UserRepository) GetList(param *model.ListUsersRequest) []*model.User 
 		if param.Limit != nil {
 			param.Limit = &defaultLimit
 		}
-		query.Offset(*param.Offset).Limit(*param.Limit)
+		if param.Offset != nil && param.Limit != nil {
+			query.Offset(*param.Offset).Limit(*param.Limit)
+		}
 	}
 	query.Order("updated_at desc")
 	query = query.Find(&result)
 	return result
+}
+
+func (repo UserRepository) FindById(id string) *model.User {
+	var user *model.User
+	item := repo.db.Table("balheh.tb_user").Take(&user, "id = ?", id)
+	if item.RowsAffected == 0 {
+		return nil
+	}
+	return user
 }

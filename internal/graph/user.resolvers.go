@@ -6,7 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"tsv-golang/internal/graph/model"
 )
 
@@ -20,7 +19,7 @@ func (r *queryResolver) ListUsers(ctx context.Context, request *model.ListUsersR
 	return r.Service.UserService.ListUsers(request)
 }
 
-// GetUser is the resolver for the getUser field.
-func (r *queryResolver) GetUser(ctx context.Context, companyCode string, id string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: GetUser - getUser"))
+// GetUserByID is the resolver for the getUserById field.
+func (r *queryResolver) GetUserByID(ctx context.Context, id string) (*model.User, error) {
+	return r.Service.UserService.GetUserByID(id)
 }

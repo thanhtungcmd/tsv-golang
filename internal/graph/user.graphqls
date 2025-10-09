@@ -37,7 +37,7 @@ input ListUsersRequest {
 
 extend type Query {
     listUsers(request: ListUsersRequest): [User]
-    getUser(company_code: String!, id: String!): User
+    getUserById(id: String!): User
 }
 
 extend type Mutation {
