@@ -1,10 +1,17 @@
 package service
 
 import (
-	"gorm.io/gorm"
+	"tsv-golang/internal/repository"
 )
 
 type Service struct {
-	DB          *gorm.DB
-	UserService UserService
+	repo        *repository.Repositories
+	UserService UserServiceInterface
+}
+
+func NewService(repo *repository.Repositories) *Service {
+	return &Service{
+		repo:        repo,
+		UserService: UserServiceInit(repo),
+	}
 }

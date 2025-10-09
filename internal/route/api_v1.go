@@ -3,6 +3,7 @@ package route
 import (
 	"tsv-golang/internal/graph"
 	"tsv-golang/internal/repository"
+	service2 "tsv-golang/internal/service"
 
 	handlerGraph "github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
@@ -22,8 +23,11 @@ func HandleApiV1(route *gin.RouterGroup, repo repository.Repositories) {
 }
 
 func graphqlHandler(repo repository.Repositories) gin.HandlerFunc {
+	service := service2.NewService(&repo)
+
 	h := handlerGraph.New(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{
-		&repo,
+		Repositories: &repo,
+		Service:      service,
 	}}))
 
 	h.AddTransport(transport.Options{})

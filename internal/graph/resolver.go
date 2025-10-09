@@ -2,6 +2,7 @@ package graph
 
 import (
 	"tsv-golang/internal/repository"
+	"tsv-golang/internal/service"
 )
 
 // This file will not be regenerated automatically.
@@ -10,4 +11,5 @@ import (
 
 type Resolver struct {
 	Repositories *repository.Repositories
+	Service      *service.Service
 }
