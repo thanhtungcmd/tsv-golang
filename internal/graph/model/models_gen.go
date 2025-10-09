@@ -22,11 +22,11 @@ type User struct {
 	PhoneNumber *string `json:"phone_number,omitempty"`
 	LastName    *string `json:"last_name,omitempty"`
 	FirstName   *string `json:"first_name,omitempty"`
-	UseYn       string  `json:"use_yn"`
+	UseYn       *int    `json:"use_yn,omitempty"`
 	CreatedAt   *string `json:"created_at,omitempty"`
 	UpdatedAt   *string `json:"updated_at,omitempty"`
-	CreatedUser *string `json:"created_user,omitempty"`
-	UpdatedUser *string `json:"updated_user,omitempty"`
+	CreatedBy   *string `json:"created_by,omitempty"`
+	UpdatedBy   *string `json:"updated_by,omitempty"`
 }
 
 type UserInput struct {
@@ -36,9 +36,4 @@ type UserInput struct {
 	PhoneNumber *string `json:"phone_number,omitempty"`
 	LastName    *string `json:"last_name,omitempty"`
 	FirstName   *string `json:"first_name,omitempty"`
-	UseYn       *string `json:"use_yn,omitempty"`
-	CreatedAt   *string `json:"created_at,omitempty"`
-	UpdatedAt   *string `json:"updated_at,omitempty"`
-	CreatedUser *string `json:"created_user,omitempty"`
-	UpdatedUser *string `json:"updated_user,omitempty"`
 }

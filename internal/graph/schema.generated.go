@@ -39,6 +39,32 @@ func (ec *executionContext) dir_hasPermission_args(ctx context.Context, rawArgs 
 	return args, nil
 }
 
+func (ec *executionContext) dir_validate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "required", ec.unmarshalOBoolean2ᚖbool)
+	if err != nil {
+		return nil, err
+	}
+	args["required"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "minLength", ec.unmarshalOInt2ᚖint)
+	if err != nil {
+		return nil, err
+	}
+	args["minLength"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "maxLength", ec.unmarshalOInt2ᚖint)
+	if err != nil {
+		return nil, err
+	}
+	args["maxLength"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "pattern", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["pattern"] = arg3
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -154,10 +180,10 @@ func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context
 				return ec.fieldContext_User_created_at(ctx, field)
 			case "updated_at":
 				return ec.fieldContext_User_updated_at(ctx, field)
-			case "created_user":
-				return ec.fieldContext_User_created_user(ctx, field)
-			case "updated_user":
-				return ec.fieldContext_User_updated_user(ctx, field)
+			case "created_by":
+				return ec.fieldContext_User_created_by(ctx, field)
+			case "updated_by":
+				return ec.fieldContext_User_updated_by(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -221,10 +247,10 @@ func (ec *executionContext) fieldContext_Query_listUsers(ctx context.Context, fi
 				return ec.fieldContext_User_created_at(ctx, field)
 			case "updated_at":
 				return ec.fieldContext_User_updated_at(ctx, field)
-			case "created_user":
-				return ec.fieldContext_User_created_user(ctx, field)
-			case "updated_user":
-				return ec.fieldContext_User_updated_user(ctx, field)
+			case "created_by":
+				return ec.fieldContext_User_created_by(ctx, field)
+			case "updated_by":
+				return ec.fieldContext_User_updated_by(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -288,10 +314,10 @@ func (ec *executionContext) fieldContext_Query_getUserById(ctx context.Context, 
 				return ec.fieldContext_User_created_at(ctx, field)
 			case "updated_at":
 				return ec.fieldContext_User_updated_at(ctx, field)
-			case "created_user":
-				return ec.fieldContext_User_created_user(ctx, field)
-			case "updated_user":
-				return ec.fieldContext_User_updated_user(ctx, field)
+			case "created_by":
+				return ec.fieldContext_User_created_by(ctx, field)
+			case "updated_by":
+				return ec.fieldContext_User_updated_by(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},

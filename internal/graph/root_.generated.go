@@ -41,6 +41,7 @@ type ResolverRoot interface {
 
 type DirectiveRoot struct {
 	HasPermission func(ctx context.Context, obj any, next graphql.Resolver, action string) (res any, err error)
+	Validate      func(ctx context.Context, obj any, next graphql.Resolver, required *bool, minLength *int, maxLength *int, pattern *string) (res any, err error)
 }
 
 type ComplexityRoot struct {
@@ -55,7 +56,7 @@ type ComplexityRoot struct {
 
 	User struct {
 		CreatedAt   func(childComplexity int) int
-		CreatedUser func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
 		Email       func(childComplexity int) int
 		FirstName   func(childComplexity int) int
 		ID          func(childComplexity int) int
@@ -63,7 +64,7 @@ type ComplexityRoot struct {
 		Password    func(childComplexity int) int
 		PhoneNumber func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
-		UpdatedUser func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
 		UseYn       func(childComplexity int) int
 		Username    func(childComplexity int) int
 	}
@@ -131,12 +132,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.User.CreatedAt(childComplexity), true
 
-	case "User.created_user":
-		if e.complexity.User.CreatedUser == nil {
+	case "User.created_by":
+		if e.complexity.User.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.User.CreatedUser(childComplexity), true
+		return e.complexity.User.CreatedBy(childComplexity), true
 
 	case "User.email":
 		if e.complexity.User.Email == nil {
@@ -187,12 +188,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.User.UpdatedAt(childComplexity), true
 
-	case "User.updated_user":
-		if e.complexity.User.UpdatedUser == nil {
+	case "User.updated_by":
+		if e.complexity.User.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.User.UpdatedUser(childComplexity), true
+		return e.complexity.User.UpdatedBy(childComplexity), true
 
 	case "User.use_yn":
 		if e.complexity.User.UseYn == nil {

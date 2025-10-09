@@ -33,7 +33,7 @@ var defaultLimit = 20
 
 func (repo UserRepository) CreateAndReturn(model *model.User) (*model.User, error) {
 	model.ID = ulid.NewULID()
-	result := repo.db.Table("balheh.tb_user").Clauses(clause.Returning{}).Create(&model)
+	result := repo.db.Table("balheh.tb_users").Clauses(clause.Returning{}).Create(&model)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -42,7 +42,7 @@ func (repo UserRepository) CreateAndReturn(model *model.User) (*model.User, erro
 
 func (repo UserRepository) Login(username string) (*model.User, error) {
 	var user model.User
-	if err := repo.db.Table("balheh.tb_user").Where("username = ?", username).First(&user).Error; err != nil {
+	if err := repo.db.Table("balheh.tb_users").Where("username = ?", username).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("user not found")
 		}
@@ -53,7 +53,7 @@ func (repo UserRepository) Login(username string) (*model.User, error) {
 
 func (repo UserRepository) GetList(param *model.ListUsersRequest) []*model.User {
 	result := make([]*model.User, 0)
-	query := repo.db.Table("balheh.tb_user").Select("*")
+	query := repo.db.Table("balheh.tb_users").Select("*")
 	if param != nil {
 		if param.ID != nil {
 			query = query.Where("id = ?", param.ID)
@@ -75,7 +75,7 @@ func (repo UserRepository) GetList(param *model.ListUsersRequest) []*model.User 
 
 func (repo UserRepository) FindById(id string) *model.User {
 	var user *model.User
-	item := repo.db.Table("balheh.tb_user").Take(&user, "id = ?", id)
+	item := repo.db.Table("balheh.tb_users").Take(&user, "id = ?", id)
 	if item.RowsAffected == 0 {
 		return nil
 	}

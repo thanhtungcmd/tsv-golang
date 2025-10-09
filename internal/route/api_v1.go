@@ -1,8 +1,8 @@
 package route
 
 import (
+	"tsv-golang/internal/direction"
 	"tsv-golang/internal/graph"
-	"tsv-golang/internal/permission"
 	"tsv-golang/internal/repository"
 	service2 "tsv-golang/internal/service"
 
@@ -30,7 +30,8 @@ func graphqlHandler(repo repository.Repositories) gin.HandlerFunc {
 		Repositories: &repo,
 		Service:      service,
 	}}
-	cfg.Directives.HasPermission = permission.HasPermission(&repo)
+	cfg.Directives.HasPermission = direction.HasPermission(&repo)
+	cfg.Directives.Validate = direction.ValidateDirective
 
 	h := handlerGraph.New(graph.NewExecutableSchema(cfg))
 

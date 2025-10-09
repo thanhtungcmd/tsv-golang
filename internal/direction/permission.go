@@ -1,4 +1,4 @@
-package permission
+package direction
 
 import (
 	"context"

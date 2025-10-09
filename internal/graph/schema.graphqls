@@ -4,6 +4,13 @@
 
 directive @hasPermission(action: String!) on FIELD_DEFINITION
 
+directive @validate(
+    required: Boolean = false,
+    minLength: Int,
+    maxLength: Int,
+    pattern: String
+) on INPUT_FIELD_DEFINITION
+
 type Query
 
 type Mutation

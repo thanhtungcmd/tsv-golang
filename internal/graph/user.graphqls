@@ -10,25 +10,20 @@ type User {
     phone_number: String
     last_name: String
     first_name: String
-    use_yn: String!
+    use_yn: Int
     created_at: String
     updated_at: String
-    created_user: String
-    updated_user: String
+    created_by: String
+    updated_by: String
 }
 
 input UserInput {
-    username: String!
-    password: String!
-    email: String
-    phone_number: String
-    last_name: String
-    first_name: String
-    use_yn: String
-    created_at: String
-    updated_at: String
-    created_user: String
-    updated_user: String
+    username: String! @validate(required: true, minLength: 8, maxLength: 50)
+    password: String! @validate(required: true, minLength: 8, maxLength: 50)
+    email: String @validate(required: true)
+    phone_number: String @validate(required: true)
+    last_name: String @validate(required: true)
+    first_name: String @validate(required: true)
 }
 
 input ListUsersRequest {

@@ -5,6 +5,7 @@ package graph
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -241,9 +242,9 @@ func (ec *executionContext) _User_use_yn(ctx context.Context, field graphql.Coll
 			return obj.UseYn, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		ec.marshalOInt2ᚖint,
 		true,
-		true,
+		false,
 	)
 }
 
@@ -254,7 +255,7 @@ func (ec *executionContext) fieldContext_User_use_yn(_ context.Context, field gr
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -318,14 +319,14 @@ func (ec *executionContext) fieldContext_User_updated_at(_ context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _User_created_user(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_created_by(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_User_created_user,
+		ec.fieldContext_User_created_by,
 		func(ctx context.Context) (any, error) {
-			return obj.CreatedUser, nil
+			return obj.CreatedBy, nil
 		},
 		nil,
 		ec.marshalOString2ᚖstring,
@@ -334,7 +335,7 @@ func (ec *executionContext) _User_created_user(ctx context.Context, field graphq
 	)
 }
 
-func (ec *executionContext) fieldContext_User_created_user(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_User_created_by(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "User",
 		Field:      field,
@@ -347,14 +348,14 @@ func (ec *executionContext) fieldContext_User_created_user(_ context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _User_updated_user(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_updated_by(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_User_updated_user,
+		ec.fieldContext_User_updated_by,
 		func(ctx context.Context) (any, error) {
-			return obj.UpdatedUser, nil
+			return obj.UpdatedBy, nil
 		},
 		nil,
 		ec.marshalOString2ᚖstring,
@@ -363,7 +364,7 @@ func (ec *executionContext) _User_updated_user(ctx context.Context, field graphq
 	)
 }
 
-func (ec *executionContext) fieldContext_User_updated_user(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_User_updated_by(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "User",
 		Field:      field,
@@ -428,7 +429,7 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj any
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"username", "password", "email", "phone_number", "last_name", "first_name", "use_yn", "created_at", "updated_at", "created_user", "updated_user"}
+	fieldsInOrder := [...]string{"username", "password", "email", "phone_number", "last_name", "first_name"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -437,81 +438,194 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj any
 		switch k {
 		case "username":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
-			data, err := ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalNString2string(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				required, err := ec.unmarshalOBoolean2ᚖbool(ctx, true)
+				if err != nil {
+					var zeroVal string
+					return zeroVal, err
+				}
+				minLength, err := ec.unmarshalOInt2ᚖint(ctx, 8)
+				if err != nil {
+					var zeroVal string
+					return zeroVal, err
+				}
+				maxLength, err := ec.unmarshalOInt2ᚖint(ctx, 50)
+				if err != nil {
+					var zeroVal string
+					return zeroVal, err
+				}
+				if ec.directives.Validate == nil {
+					var zeroVal string
+					return zeroVal, errors.New("directive validate is not implemented")
+				}
+				return ec.directives.Validate(ctx, obj, directive0, required, minLength, maxLength, nil)
 			}
-			it.Username = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(string); ok {
+				it.Username = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "password":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-			data, err := ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalNString2string(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				required, err := ec.unmarshalOBoolean2ᚖbool(ctx, true)
+				if err != nil {
+					var zeroVal string
+					return zeroVal, err
+				}
+				minLength, err := ec.unmarshalOInt2ᚖint(ctx, 8)
+				if err != nil {
+					var zeroVal string
+					return zeroVal, err
+				}
+				maxLength, err := ec.unmarshalOInt2ᚖint(ctx, 50)
+				if err != nil {
+					var zeroVal string
+					return zeroVal, err
+				}
+				if ec.directives.Validate == nil {
+					var zeroVal string
+					return zeroVal, errors.New("directive validate is not implemented")
+				}
+				return ec.directives.Validate(ctx, obj, directive0, required, minLength, maxLength, nil)
 			}
-			it.Password = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(string); ok {
+				it.Password = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "email":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				required, err := ec.unmarshalOBoolean2ᚖbool(ctx, true)
+				if err != nil {
+					var zeroVal *string
+					return zeroVal, err
+				}
+				if ec.directives.Validate == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive validate is not implemented")
+				}
+				return ec.directives.Validate(ctx, obj, directive0, required, nil, nil, nil)
 			}
-			it.Email = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*string); ok {
+				it.Email = data
+			} else if tmp == nil {
+				it.Email = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "phone_number":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("phone_number"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				required, err := ec.unmarshalOBoolean2ᚖbool(ctx, true)
+				if err != nil {
+					var zeroVal *string
+					return zeroVal, err
+				}
+				if ec.directives.Validate == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive validate is not implemented")
+				}
+				return ec.directives.Validate(ctx, obj, directive0, required, nil, nil, nil)
 			}
-			it.PhoneNumber = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*string); ok {
+				it.PhoneNumber = data
+			} else if tmp == nil {
+				it.PhoneNumber = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "last_name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last_name"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				required, err := ec.unmarshalOBoolean2ᚖbool(ctx, true)
+				if err != nil {
+					var zeroVal *string
+					return zeroVal, err
+				}
+				if ec.directives.Validate == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive validate is not implemented")
+				}
+				return ec.directives.Validate(ctx, obj, directive0, required, nil, nil, nil)
 			}
-			it.LastName = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*string); ok {
+				it.LastName = data
+			} else if tmp == nil {
+				it.LastName = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "first_name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first_name"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				required, err := ec.unmarshalOBoolean2ᚖbool(ctx, true)
+				if err != nil {
+					var zeroVal *string
+					return zeroVal, err
+				}
+				if ec.directives.Validate == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive validate is not implemented")
+				}
+				return ec.directives.Validate(ctx, obj, directive0, required, nil, nil, nil)
 			}
-			it.FirstName = data
-		case "use_yn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("use_yn"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+
+			tmp, err := directive1(ctx)
 			if err != nil {
-				return it, err
+				return it, graphql.ErrorOnPath(ctx, err)
 			}
-			it.UseYn = data
-		case "created_at":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("created_at"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
+			if data, ok := tmp.(*string); ok {
+				it.FirstName = data
+			} else if tmp == nil {
+				it.FirstName = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
 			}
-			it.CreatedAt = data
-		case "updated_at":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updated_at"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAt = data
-		case "created_user":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("created_user"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedUser = data
-		case "updated_user":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updated_user"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedUser = data
 		}
 	}
 
@@ -562,17 +676,14 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			out.Values[i] = ec._User_first_name(ctx, field, obj)
 		case "use_yn":
 			out.Values[i] = ec._User_use_yn(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "created_at":
 			out.Values[i] = ec._User_created_at(ctx, field, obj)
 		case "updated_at":
 			out.Values[i] = ec._User_updated_at(ctx, field, obj)
-		case "created_user":
-			out.Values[i] = ec._User_created_user(ctx, field, obj)
-		case "updated_user":
-			out.Values[i] = ec._User_updated_user(ctx, field, obj)
+		case "created_by":
+			out.Values[i] = ec._User_created_by(ctx, field, obj)
+		case "updated_by":
+			out.Values[i] = ec._User_updated_by(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
