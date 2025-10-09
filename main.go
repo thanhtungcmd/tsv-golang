@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 	"tsv-golang/internal/filter"
-	"tsv-golang/internal/persistence"
+	"tsv-golang/internal/repository"
 	"tsv-golang/internal/route"
 
 	"github.com/gin-gonic/gin"
@@ -43,8 +43,8 @@ func main() {
 	fmt.Printf("<------Server started------>")
 }
 
-func loadPersisten() *persistence.Repositories {
-	repo, err := persistence.NewRepositories() // load repositories
+func loadPersisten() *repository.Repositories {
+	repo, err := repository.NewRepositories() // load repositories
 	if err != nil {
 		panic(any(err))
 	}

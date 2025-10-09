@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 	"time"
-	"tsv-golang/internal/handler"
+	"tsv-golang/internal/route"
 	"tsv-golang/pkg/log"
 
 	"github.com/gin-gonic/gin"
@@ -37,11 +37,11 @@ func AuthFilter(c *gin.Context) {
 
 	if err := tokenValid(c, apiSecretKey); err != nil {
 		log.Error(err)
-		res := &handler.ResponseStruct{
+		res := &route.ResponseStruct{
 			ErrorCode: 401,
 			Message:   "Unauthorized",
 		}
-		handler.Response(c, res, http.StatusUnauthorized)
+		route.Response(c, res, http.StatusUnauthorized)
 		c.Abort()
 		return
 	}

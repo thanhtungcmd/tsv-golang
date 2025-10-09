@@ -1,7 +1,7 @@
 package graph
 
 import (
-	"tsv-golang/internal/persistence"
+	"tsv-golang/internal/repository"
 )
 
 // This file will not be regenerated automatically.
@@ -9,5 +9,5 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	Repositories *persistence.Repositories
+	Repositories *repository.Repositories
 }

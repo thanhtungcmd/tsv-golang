@@ -2,8 +2,7 @@ package route
 
 import (
 	"tsv-golang/internal/graph"
-	"tsv-golang/internal/handler"
-	"tsv-golang/internal/persistence"
+	"tsv-golang/internal/repository"
 
 	handlerGraph "github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
@@ -14,15 +13,15 @@ import (
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
-func HandleApiV1(route *gin.RouterGroup, repo persistence.Repositories) {
-	authHandler := handler.ApiAuthHandlerInit(repo)
+func HandleApiV1(route *gin.RouterGroup, repo repository.Repositories) {
+	authHandler := ApiAuthHandlerInit(repo)
 	route.POST("auth/login", authHandler.Login)
 
 	route.POST("/query", graphqlHandler(repo))
 	route.GET("/", playgroundHandler())
 }
 
-func graphqlHandler(repo persistence.Repositories) gin.HandlerFunc {
+func graphqlHandler(repo repository.Repositories) gin.HandlerFunc {
 	h := handlerGraph.New(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{
 		&repo,
 	}}))

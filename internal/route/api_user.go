@@ -1,10 +1,10 @@
-package handler
+package route
 
 import (
 	"net/http"
 	"os"
 	"time"
-	"tsv-golang/internal/persistence"
+	"tsv-golang/internal/repository"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
@@ -12,10 +12,10 @@ import (
 )
 
 type ApiAuthHandler struct {
-	repo persistence.Repositories
+	repo repository.Repositories
 }
 
-func ApiAuthHandlerInit(repo persistence.Repositories) *ApiAuthHandler {
+func ApiAuthHandlerInit(repo repository.Repositories) *ApiAuthHandler {
 	return &ApiAuthHandler{
 		repo: repo,
 	}

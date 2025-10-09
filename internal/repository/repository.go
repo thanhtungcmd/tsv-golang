@@ -1,11 +1,10 @@
-package persistence
+package repository
 
 import (
 	"fmt"
 	"log"
 	"os"
 	"time"
-	"tsv-golang/internal/repository"
 	"tsv-golang/pkg/env"
 
 	"gorm.io/driver/postgres"
@@ -15,7 +14,7 @@ import (
 
 type Repositories struct {
 	DB   *gorm.DB
-	User repository.UserRepositoryInterface
+	User UserRepositoryInterface
 }
 
 func NewRepositories() (*Repositories, error) {
@@ -47,7 +46,7 @@ func NewRepositories() (*Repositories, error) {
 	}
 	return &Repositories{
 		DB:   db,
-		User: repository.UserRepositoryInit(db),
+		User: UserRepositoryInit(db),
 	}, nil
 }
 
