@@ -16,11 +16,12 @@ type Query struct {
 
 type User struct {
 	ID          string  `json:"id"`
-	CompanyCode string  `json:"company_code"`
 	Username    string  `json:"username"`
 	Password    string  `json:"password"`
 	Email       *string `json:"email,omitempty"`
-	Authority   *string `json:"authority,omitempty"`
+	PhoneNumber *string `json:"phone_number,omitempty"`
+	LastName    *string `json:"last_name,omitempty"`
+	FirstName   *string `json:"first_name,omitempty"`
 	UseYn       string  `json:"use_yn"`
 	CreatedAt   *string `json:"created_at,omitempty"`
 	UpdatedAt   *string `json:"updated_at,omitempty"`
@@ -29,11 +30,12 @@ type User struct {
 }
 
 type UserInput struct {
-	CompanyCode string  `json:"company_code"`
 	Username    string  `json:"username"`
 	Password    string  `json:"password"`
 	Email       *string `json:"email,omitempty"`
-	Authority   *string `json:"authority,omitempty"`
+	PhoneNumber *string `json:"phone_number,omitempty"`
+	LastName    *string `json:"last_name,omitempty"`
+	FirstName   *string `json:"first_name,omitempty"`
 	UseYn       *string `json:"use_yn,omitempty"`
 	CreatedAt   *string `json:"created_at,omitempty"`
 	UpdatedAt   *string `json:"updated_at,omitempty"`

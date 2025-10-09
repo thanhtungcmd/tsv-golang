@@ -136,16 +136,18 @@ func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_User_id(ctx, field)
-			case "company_code":
-				return ec.fieldContext_User_company_code(ctx, field)
 			case "username":
 				return ec.fieldContext_User_username(ctx, field)
 			case "password":
 				return ec.fieldContext_User_password(ctx, field)
 			case "email":
 				return ec.fieldContext_User_email(ctx, field)
-			case "authority":
-				return ec.fieldContext_User_authority(ctx, field)
+			case "phone_number":
+				return ec.fieldContext_User_phone_number(ctx, field)
+			case "last_name":
+				return ec.fieldContext_User_last_name(ctx, field)
+			case "first_name":
+				return ec.fieldContext_User_first_name(ctx, field)
 			case "use_yn":
 				return ec.fieldContext_User_use_yn(ctx, field)
 			case "created_at":
@@ -201,16 +203,18 @@ func (ec *executionContext) fieldContext_Query_listUsers(ctx context.Context, fi
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_User_id(ctx, field)
-			case "company_code":
-				return ec.fieldContext_User_company_code(ctx, field)
 			case "username":
 				return ec.fieldContext_User_username(ctx, field)
 			case "password":
 				return ec.fieldContext_User_password(ctx, field)
 			case "email":
 				return ec.fieldContext_User_email(ctx, field)
-			case "authority":
-				return ec.fieldContext_User_authority(ctx, field)
+			case "phone_number":
+				return ec.fieldContext_User_phone_number(ctx, field)
+			case "last_name":
+				return ec.fieldContext_User_last_name(ctx, field)
+			case "first_name":
+				return ec.fieldContext_User_first_name(ctx, field)
 			case "use_yn":
 				return ec.fieldContext_User_use_yn(ctx, field)
 			case "created_at":
@@ -266,16 +270,18 @@ func (ec *executionContext) fieldContext_Query_getUserById(ctx context.Context, 
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_User_id(ctx, field)
-			case "company_code":
-				return ec.fieldContext_User_company_code(ctx, field)
 			case "username":
 				return ec.fieldContext_User_username(ctx, field)
 			case "password":
 				return ec.fieldContext_User_password(ctx, field)
 			case "email":
 				return ec.fieldContext_User_email(ctx, field)
-			case "authority":
-				return ec.fieldContext_User_authority(ctx, field)
+			case "phone_number":
+				return ec.fieldContext_User_phone_number(ctx, field)
+			case "last_name":
+				return ec.fieldContext_User_last_name(ctx, field)
+			case "first_name":
+				return ec.fieldContext_User_first_name(ctx, field)
 			case "use_yn":
 				return ec.fieldContext_User_use_yn(ctx, field)
 			case "created_at":

@@ -54,13 +54,14 @@ type ComplexityRoot struct {
 	}
 
 	User struct {
-		Authority   func(childComplexity int) int
-		CompanyCode func(childComplexity int) int
 		CreatedAt   func(childComplexity int) int
 		CreatedUser func(childComplexity int) int
 		Email       func(childComplexity int) int
+		FirstName   func(childComplexity int) int
 		ID          func(childComplexity int) int
+		LastName    func(childComplexity int) int
 		Password    func(childComplexity int) int
+		PhoneNumber func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
 		UpdatedUser func(childComplexity int) int
 		UseYn       func(childComplexity int) int
@@ -123,20 +124,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.ListUsers(childComplexity, args["request"].(*model.ListUsersRequest)), true
 
-	case "User.authority":
-		if e.complexity.User.Authority == nil {
-			break
-		}
-
-		return e.complexity.User.Authority(childComplexity), true
-
-	case "User.company_code":
-		if e.complexity.User.CompanyCode == nil {
-			break
-		}
-
-		return e.complexity.User.CompanyCode(childComplexity), true
-
 	case "User.created_at":
 		if e.complexity.User.CreatedAt == nil {
 			break
@@ -158,6 +145,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.User.Email(childComplexity), true
 
+	case "User.first_name":
+		if e.complexity.User.FirstName == nil {
+			break
+		}
+
+		return e.complexity.User.FirstName(childComplexity), true
+
 	case "User.id":
 		if e.complexity.User.ID == nil {
 			break
@@ -165,12 +159,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.User.ID(childComplexity), true
 
+	case "User.last_name":
+		if e.complexity.User.LastName == nil {
+			break
+		}
+
+		return e.complexity.User.LastName(childComplexity), true
+
 	case "User.password":
 		if e.complexity.User.Password == nil {
 			break
 		}
 
 		return e.complexity.User.Password(childComplexity), true
+
+	case "User.phone_number":
+		if e.complexity.User.PhoneNumber == nil {
+			break
+		}
+
+		return e.complexity.User.PhoneNumber(childComplexity), true
 
 	case "User.updated_at":
 		if e.complexity.User.UpdatedAt == nil {
