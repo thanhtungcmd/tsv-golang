@@ -18,7 +18,7 @@ import (
 
 type MutationResolver interface {
 	CreateUser(ctx context.Context, input model.UserInput) (*model.User, error)
-	UpdateUser(ctx context.Context, id string, input model.UserInput) (*model.User, error)
+	UpdateUser(ctx context.Context, id string, input model.UserUpdateInput) (*model.User, error)
 }
 type QueryResolver interface {
 	Login(ctx context.Context, username string, password string) (*model.LoginResponse, error)
@@ -86,7 +86,7 @@ func (ec *executionContext) field_Mutation_updateUser_args(ctx context.Context, 
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUserInput2tsvᚑgolangᚋinternalᚋgraphᚋmodelᚐUserInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUserUpdateInput2tsvᚑgolangᚋinternalᚋgraphᚋmodelᚐUserUpdateInput)
 	if err != nil {
 		return nil, err
 	}
@@ -251,7 +251,7 @@ func (ec *executionContext) _Mutation_updateUser(ctx context.Context, field grap
 		ec.fieldContext_Mutation_updateUser,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateUser(ctx, fc.Args["id"].(string), fc.Args["input"].(model.UserInput))
+			return ec.resolvers.Mutation().UpdateUser(ctx, fc.Args["id"].(string), fc.Args["input"].(model.UserUpdateInput))
 		},
 		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
 			directive0 := next

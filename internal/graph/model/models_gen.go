@@ -42,3 +42,10 @@ type UserInput struct {
 	LastName    *string `json:"last_name,omitempty"`
 	FirstName   *string `json:"first_name,omitempty"`
 }
+
+type UserUpdateInput struct {
+	Email       string  `json:"email"`
+	PhoneNumber *string `json:"phone_number,omitempty"`
+	LastName    *string `json:"last_name,omitempty"`
+	FirstName   *string `json:"first_name,omitempty"`
+}

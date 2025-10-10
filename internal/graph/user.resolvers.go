@@ -16,7 +16,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput
 }
 
 // UpdateUser is the resolver for the updateUser field.
-func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input model.UserInput) (*model.User, error) {
+func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input model.UserUpdateInput) (*model.User, error) {
 	userLogin := ctx.Value("userLogin").(string)
 	return r.Service.UserService.UpdateUser(userLogin, id, input)
 }

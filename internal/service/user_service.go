@@ -24,7 +24,7 @@ type UserServiceInterface interface {
 	CreateUser(userLogin string, input model.UserInput) (*model.User, error)
 	ListUsers(request *model.ListUsersRequest) ([]*model.User, error)
 	GetUserByID(id string) (*model.User, error)
-	UpdateUser(userLogin string, id string, input model.UserInput) (*model.User, error)
+	UpdateUser(userLogin string, id string, input model.UserUpdateInput) (*model.User, error)
 	Login(username string, password string) (*model.LoginResponse, error)
 }
 
@@ -102,7 +102,7 @@ func (u *UserService) GetUserByID(id string) (*model.User, error) {
 	return result, nil
 }
 
-func (u *UserService) UpdateUser(userLogin string, id string, input model.UserInput) (*model.User, error) {
+func (u *UserService) UpdateUser(userLogin string, id string, input model.UserUpdateInput) (*model.User, error) {
 	user := u.repo.User.FindById(id)
 	err := mapstructure.Decode(input, &user)
 	if err != nil {
@@ -111,11 +111,6 @@ func (u *UserService) UpdateUser(userLogin string, id string, input model.UserIn
 	timeNow := datetime.Datetime().TimeNow().ToString()
 	user.UpdatedAt = &timeNow
 	user.UpdatedBy = &userLogin
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
-	if err != nil {
-		return nil, err
-	}
-	user.Password = string(hashedPassword)
 	err = u.repo.User.UpdateById(id, *user)
 	if err != nil {
 		return nil, err

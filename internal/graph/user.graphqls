@@ -25,7 +25,14 @@ type LoginResponse {
 input UserInput {
     username: String! @validate(required: true, minLength: 8, maxLength: 50)
     password: String! @validate(required: true, minLength: 8, maxLength: 50)
-    email: String! @validate(required: true)
+    email: String! @validate(required: true, maxLength: 50)
+    phone_number: String @validate(required: true, minLength: 10, maxLength: 11)
+    last_name: String @validate(required: false, maxLength: 50)
+    first_name: String @validate(required: false, maxLength: 50)
+}
+
+input UserUpdateInput {
+    email: String! @validate(required: true, maxLength: 50)
     phone_number: String @validate(required: true, minLength: 10, maxLength: 11)
     last_name: String @validate(required: false, maxLength: 50)
     first_name: String @validate(required: false, maxLength: 50)
@@ -45,5 +52,5 @@ extend type Query {
 
 extend type Mutation {
     createUser(input: UserInput!): User @authen @hasPermission(action: "user.create")
-    updateUser(id: String!, input: UserInput!): User @authen @hasPermission(action: "user.update")
+    updateUser(id: String!, input: UserUpdateInput!): User @authen @hasPermission(action: "user.update")
 }

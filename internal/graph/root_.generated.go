@@ -53,7 +53,7 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		CreateUser func(childComplexity int, input model.UserInput) int
-		UpdateUser func(childComplexity int, id string, input model.UserInput) int
+		UpdateUser func(childComplexity int, id string, input model.UserUpdateInput) int
 	}
 
 	Query struct {
@@ -133,7 +133,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateUser(childComplexity, args["id"].(string), args["input"].(model.UserInput)), true
+		return e.complexity.Mutation.UpdateUser(childComplexity, args["id"].(string), args["input"].(model.UserUpdateInput)), true
 
 	case "Query.getUserById":
 		if e.complexity.Query.GetUserByID == nil {
@@ -265,6 +265,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputListUsersRequest,
 		ec.unmarshalInputUserInput,
+		ec.unmarshalInputUserUpdateInput,
 	)
 	first := true
 
