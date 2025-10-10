@@ -117,7 +117,7 @@ func (u *UserService) UpdateUser(userLogin string, id string, input model.UserUp
 	timeNow := datetime.Datetime().TimeNow().ToString()
 	user.UpdatedAt = &timeNow
 	user.UpdatedBy = &userLogin
-	err = u.repo.User.UpdateById(id, *user)
+	err = u.repo.User.UpdateByConditions(id, *user, []string{"email", "phone_number", "last_name", "first_name"}...)
 	if err != nil {
 		return nil, err
 	}
