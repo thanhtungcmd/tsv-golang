@@ -31,7 +31,7 @@ func graphqlHandler(repo repository.Repositories) gin.HandlerFunc {
 		Service:      service,
 	}}
 	cfg.Directives.HasPermission = direction.HasPermission(&repo)
-	cfg.Directives.Validate = direction.ValidateDirective
+	cfg.Directives.Validate = direction.Validate
 
 	h := handlerGraph.New(graph.NewExecutableSchema(cfg))
 

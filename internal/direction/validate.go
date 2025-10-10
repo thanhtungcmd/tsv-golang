@@ -10,7 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
-func ValidateDirective(
+func Validate(
 	ctx context.Context, obj any, next graphql.Resolver, required *bool, minLength *int, maxLength *int, pattern *string,
 ) (interface{}, error) {
 	// Resolve the value (value after default/unmarshal)
