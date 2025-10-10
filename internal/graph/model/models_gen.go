@@ -2,6 +2,36 @@
 
 package model
 
+type Board struct {
+	ID          string  `json:"id"`
+	ProjectID   *string `json:"projectId,omitempty"`
+	Name        *string `json:"name,omitempty"`
+	Description *string `json:"description,omitempty"`
+	SortOrder   *int    `json:"sortOrder,omitempty"`
+	CreatedAt   *string `json:"createdAt,omitempty"`
+	UpdatedAt   *string `json:"updatedAt,omitempty"`
+	CreatedBy   *string `json:"createdBy,omitempty"`
+	UpdatedBy   *string `json:"updatedBy,omitempty"`
+}
+
+type BoardInput struct {
+	ProjectID   string  `json:"projectId"`
+	Name        string  `json:"name"`
+	Description *string `json:"description,omitempty"`
+	SortOrder   *int    `json:"sortOrder,omitempty"`
+}
+
+type BoardUpdateInput struct {
+	Name        string  `json:"name"`
+	Description *string `json:"description,omitempty"`
+	SortOrder   *int    `json:"sortOrder,omitempty"`
+}
+
+type ListBoardRequest struct {
+	Limit  *int `json:"limit,omitempty"`
+	Offset *int `json:"offset,omitempty"`
+}
+
 type ListUsersRequest struct {
 	ID     *string `json:"id,omitempty"`
 	Limit  *int    `json:"limit,omitempty"`

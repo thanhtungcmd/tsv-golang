@@ -1,0 +1,45 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type Board {
+    id: String!
+    projectId: String
+    name: String
+    description: String
+    sortOrder: Int
+    createdAt: String
+    updatedAt: String
+    createdBy: String
+    updatedBy: String
+}
+
+input BoardInput {
+    projectId: String!
+    name: String! @validate(required: true, minLength: 8, maxLength: 50)
+    description: String
+    sortOrder: Int
+}
+
+input BoardUpdateInput {
+    name: String!
+    description: String
+    sortOrder: Int
+}
+
+input ListBoardRequest {
+    limit: Int
+    offset: Int
+}
+
+
+extend type Query {
+    listBoard(request: ListBoardRequest): [Board] @authen
+    getBoardById(id: String!): Board @authen
+}
+
+extend type Mutation {
+    createBoard(input: BoardInput): Board @authen
+    updateBoard(id: String!, input: BoardUpdateInput): Board @authen
+    deleteBoard(id: String!): String! @authen
+}
