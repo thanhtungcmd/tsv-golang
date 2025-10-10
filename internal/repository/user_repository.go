@@ -123,7 +123,7 @@ func (repo UserRepository) UpdateById(id string, model model.User) error {
 }
 
 func (repo UserRepository) UpdateByConditions(id string, model model.User, fieldsUpdate ...string) error {
-	item := repo.db.Table("balheh.tb_users").Select(fieldsUpdate).Where("id = ?", id).Updates(model)
+	item := repo.db.Table("balheh.tb_users").Where("id = ?", id).Select(fieldsUpdate).Updates(model)
 	if item.RowsAffected == 0 {
 		return item.Error
 	}

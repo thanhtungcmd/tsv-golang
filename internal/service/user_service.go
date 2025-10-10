@@ -157,7 +157,7 @@ func (u *UserService) ChangePassword(email string, verifyCode string, password s
 	}
 	user.Password = string(hashedPassword)
 	user.VerifyCode = nil
-	err = u.repo.User.UpdateByConditions(user.ID, *user, []string{"password, verify_code"}...)
+	err = u.repo.User.UpdateByConditions(user.ID, *user, []string{"password", "verify_code"}...)
 	if err != nil {
 		return nil, err
 	}
