@@ -5,9 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 )
 
@@ -31,6 +33,29 @@ func Authen(ctx context.Context, obj interface{}, next graphql.Resolver) (res in
 	}
 
 	return next(ctx)
+}
+
+func AuthContextMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			c.Next()
+			return
+		}
+
+		parts := strings.Split(authHeader, " ")
+		if len(parts) != 2 || parts[0] != "Bearer" {
+			c.Next()
+			return
+		}
+
+		tokenString := parts[1]
+
+		ctx := context.WithValue(c.Request.Context(), "token", tokenString)
+		c.Request = c.Request.WithContext(ctx)
+
+		c.Next()
+	}
 }
 
 func tokenValid(tokenString string, secretKey string) error {
