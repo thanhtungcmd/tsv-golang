@@ -17,6 +17,11 @@ type User {
     updated_by: String
 }
 
+type LoginResponse {
+    user: User!,
+    access_token: String!
+}
+
 input UserInput {
     username: String! @validate(required: true, minLength: 8, maxLength: 50)
     password: String! @validate(required: true, minLength: 8, maxLength: 50)
@@ -33,6 +38,7 @@ input ListUsersRequest {
 }
 
 extend type Query {
+    login(username: String!, password: String!): LoginResponse!
     listUsers(request: ListUsersRequest): [User] @authen
     getUserById(id: String!): User
 }

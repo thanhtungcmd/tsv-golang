@@ -19,6 +19,7 @@ type UserRepositoryInterface interface {
 	Login(username string) (*model.User, error)
 	FindById(id string) *model.User
 	UpdateById(id string, model model.User) error
+	FindByUsername(username string) *model.User
 }
 
 func UserRepositoryInit(db *gorm.DB) *UserRepository {
@@ -77,6 +78,15 @@ func (repo UserRepository) GetList(param *model.ListUsersRequest) []*model.User 
 func (repo UserRepository) FindById(id string) *model.User {
 	var user *model.User
 	item := repo.db.Table("balheh.tb_users").Take(&user, "id = ?", id)
+	if item.RowsAffected == 0 {
+		return nil
+	}
+	return user
+}
+
+func (repo UserRepository) FindByUsername(username string) *model.User {
+	var user *model.User
+	item := repo.db.Table("balheh.tb_users").Take(&user, "username = ?", username)
 	if item.RowsAffected == 0 {
 		return nil
 	}

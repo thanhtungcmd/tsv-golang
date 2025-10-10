@@ -8,6 +8,11 @@ type ListUsersRequest struct {
 	Offset *int    `json:"offset,omitempty"`
 }
 
+type LoginResponse struct {
+	User        *User  `json:"user"`
+	AccessToken string `json:"access_token"`
+}
+
 type Mutation struct {
 }
 

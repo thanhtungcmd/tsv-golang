@@ -19,6 +19,11 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input mode
 	return r.Service.UserService.UpdateUser(id, input)
 }
 
+// Login is the resolver for the login field.
+func (r *queryResolver) Login(ctx context.Context, username string, password string) (*model.LoginResponse, error) {
+	return r.Service.UserService.Login(username, password)
+}
+
 // ListUsers is the resolver for the listUsers field.
 func (r *queryResolver) ListUsers(ctx context.Context, request *model.ListUsersRequest) ([]*model.User, error) {
 	return r.Service.UserService.ListUsers(request)

@@ -1,9 +1,13 @@
 package service
 
 import (
+	"fmt"
+	"os"
+	"time"
 	"tsv-golang/internal/graph/model"
 	"tsv-golang/internal/repository"
 
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/mitchellh/mapstructure"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -17,6 +21,7 @@ type UserServiceInterface interface {
 	ListUsers(request *model.ListUsersRequest) ([]*model.User, error)
 	GetUserByID(id string) (*model.User, error)
 	UpdateUser(id string, input model.UserInput) (*model.User, error)
+	Login(username string, password string) (*model.LoginResponse, error)
 }
 
 func UserServiceInit(repo *repository.Repositories) *UserService {
@@ -26,6 +31,35 @@ func UserServiceInit(repo *repository.Repositories) *UserService {
 }
 
 var _ UserServiceInterface = &UserService{}
+
+func (u *UserService) Login(username string, password string) (*model.LoginResponse, error) {
+	result := &model.LoginResponse{}
+	user := u.repo.User.FindByUsername(username)
+	if user == nil {
+		return nil, fmt.Errorf("user not found")
+	}
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+		return nil, fmt.Errorf("user not found")
+	}
+	secretKey := os.Getenv("SECRET_KEY")
+	if secretKey == "" {
+		secretKey = "defaultSecretKey"
+	}
+	claims := jwt.MapClaims{
+		"sub": username,
+		"exp": time.Now().Add(time.Hour * 24).Unix(),
+		"iat": time.Now().Unix(),
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token.Header["typ"] = "JWT"
+	tokenString, err := token.SignedString([]byte(secretKey))
+	if err != nil {
+		return nil, fmt.Errorf("user not found")
+	}
+	result.AccessToken = tokenString
+	result.User = user
+	return result, nil
+}
 
 func (u *UserService) CreateUser(input model.UserInput) (*model.User, error) {
 	user := &model.User{}

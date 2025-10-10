@@ -46,6 +46,11 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	LoginResponse struct {
+		AccessToken func(childComplexity int) int
+		User        func(childComplexity int) int
+	}
+
 	Mutation struct {
 		CreateUser func(childComplexity int, input model.UserInput) int
 		UpdateUser func(childComplexity int, id string, input model.UserInput) int
@@ -54,6 +59,7 @@ type ComplexityRoot struct {
 	Query struct {
 		GetUserByID func(childComplexity int, id string) int
 		ListUsers   func(childComplexity int, request *model.ListUsersRequest) int
+		Login       func(childComplexity int, username string, password string) int
 	}
 
 	User struct {
@@ -90,6 +96,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 	ec := executionContext{nil, e, 0, 0, nil}
 	_ = ec
 	switch typeName + "." + field {
+
+	case "LoginResponse.access_token":
+		if e.complexity.LoginResponse.AccessToken == nil {
+			break
+		}
+
+		return e.complexity.LoginResponse.AccessToken(childComplexity), true
+
+	case "LoginResponse.user":
+		if e.complexity.LoginResponse.User == nil {
+			break
+		}
+
+		return e.complexity.LoginResponse.User(childComplexity), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -138,6 +158,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.ListUsers(childComplexity, args["request"].(*model.ListUsersRequest)), true
+
+	case "Query.login":
+		if e.complexity.Query.Login == nil {
+			break
+		}
+
+		args, err := ec.field_Query_login_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Login(childComplexity, args["username"].(string), args["password"].(string)), true
 
 	case "User.created_at":
 		if e.complexity.User.CreatedAt == nil {
