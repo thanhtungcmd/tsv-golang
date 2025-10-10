@@ -17,10 +17,6 @@ import (
 
 func HandleApiV1(route *gin.RouterGroup, repo repository.Repositories) {
 	route.Use(direction.AuthContextMiddleware())
-
-	authHandler := ApiAuthHandlerInit(repo)
-	route.POST("auth/login", authHandler.Login)
-
 	route.POST("/query", graphqlHandler(repo))
 	route.GET("/", playgroundHandler())
 }

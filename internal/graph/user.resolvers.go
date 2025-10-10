@@ -9,6 +9,11 @@ import (
 	"tsv-golang/internal/graph/model"
 )
 
+// ForgetPassword is the resolver for the forgetPassword field.
+func (r *mutationResolver) ForgetPassword(ctx context.Context, email string) (*string, error) {
+	return r.Service.UserService.ForgetPassword(email)
+}
+
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
 	userLogin := ctx.Value("userLogin").(string)

@@ -51,6 +51,7 @@ extend type Query {
 }
 
 extend type Mutation {
+    forgetPassword(email: String!): String
     createUser(input: UserInput!): User @authen @hasPermission(action: "user.create")
     updateUser(id: String!, input: UserUpdateInput!): User @authen @hasPermission(action: "user.update")
 }

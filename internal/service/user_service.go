@@ -7,6 +7,7 @@ import (
 	"tsv-golang/internal/graph/model"
 	"tsv-golang/internal/repository"
 	"tsv-golang/pkg/datetime"
+	"tsv-golang/pkg/mail"
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/mitchellh/mapstructure"
@@ -26,6 +27,7 @@ type UserServiceInterface interface {
 	GetUserByID(id string) (*model.User, error)
 	UpdateUser(userLogin string, id string, input model.UserUpdateInput) (*model.User, error)
 	Login(username string, password string) (*model.LoginResponse, error)
+	ForgetPassword(email string) (*string, error)
 }
 
 func UserServiceInit(repo *repository.Repositories) *UserService {
@@ -116,4 +118,18 @@ func (u *UserService) UpdateUser(userLogin string, id string, input model.UserUp
 		return nil, err
 	}
 	return user, nil
+}
+
+func (u *UserService) ForgetPassword(email string) (*string, error) {
+	user := u.repo.User.FindByEmail(email)
+	if user == nil {
+		return nil, fmt.Errorf("user not found")
+	}
+	to := make([]string, 0)
+	to = append(to, email)
+	err := mail.SendEmail(to, "Quên mật khẩu", "123456")
+	if err != nil {
+		return nil, err
+	}
+	return &email, nil
 }
