@@ -111,6 +111,11 @@ func (u *UserService) UpdateUser(userLogin string, id string, input model.UserIn
 	timeNow := datetime.Datetime().TimeNow().ToString()
 	user.UpdatedAt = &timeNow
 	user.UpdatedBy = &userLogin
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
+	user.Password = string(hashedPassword)
 	err = u.repo.User.UpdateById(id, *user)
 	if err != nil {
 		return nil, err
