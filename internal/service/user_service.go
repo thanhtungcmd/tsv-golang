@@ -6,6 +6,7 @@ import (
 	"time"
 	"tsv-golang/internal/graph/model"
 	"tsv-golang/internal/repository"
+	"tsv-golang/pkg/datetime"
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/mitchellh/mapstructure"
@@ -16,11 +17,14 @@ type UserService struct {
 	repo *repository.Repositories
 }
 
+var userActive = 1
+var userInActive = 0
+
 type UserServiceInterface interface {
-	CreateUser(input model.UserInput) (*model.User, error)
+	CreateUser(userLogin string, input model.UserInput) (*model.User, error)
 	ListUsers(request *model.ListUsersRequest) ([]*model.User, error)
 	GetUserByID(id string) (*model.User, error)
-	UpdateUser(id string, input model.UserInput) (*model.User, error)
+	UpdateUser(userLogin string, id string, input model.UserInput) (*model.User, error)
 	Login(username string, password string) (*model.LoginResponse, error)
 }
 
@@ -46,9 +50,12 @@ func (u *UserService) Login(username string, password string) (*model.LoginRespo
 		secretKey = "defaultSecretKey"
 	}
 	claims := jwt.MapClaims{
-		"sub": username,
-		"exp": time.Now().Add(time.Hour * 24).Unix(),
-		"iat": time.Now().Unix(),
+		"sub":      username,
+		"exp":      time.Now().Add(time.Hour * 24).Unix(),
+		"iat":      time.Now().Unix(),
+		"username": username,
+		"email":    user.Email,
+		"phone":    user.PhoneNumber,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token.Header["typ"] = "JWT"
@@ -61,7 +68,7 @@ func (u *UserService) Login(username string, password string) (*model.LoginRespo
 	return result, nil
 }
 
-func (u *UserService) CreateUser(input model.UserInput) (*model.User, error) {
+func (u *UserService) CreateUser(userLogin string, input model.UserInput) (*model.User, error) {
 	user := &model.User{}
 	err := mapstructure.Decode(input, &user)
 	if err != nil {
@@ -72,6 +79,12 @@ func (u *UserService) CreateUser(input model.UserInput) (*model.User, error) {
 		return nil, err
 	}
 	user.Password = string(hashedPassword)
+	timeNow := datetime.Datetime().TimeNow().ToString()
+	user.CreatedAt = &timeNow
+	user.UpdatedAt = &timeNow
+	user.CreatedBy = &userLogin
+	user.UpdatedBy = &userLogin
+	user.UseYn = &userActive
 	data, err := u.repo.User.CreateAndReturn(user)
 	if err != nil {
 		return nil, err
@@ -89,12 +102,15 @@ func (u *UserService) GetUserByID(id string) (*model.User, error) {
 	return result, nil
 }
 
-func (u *UserService) UpdateUser(id string, input model.UserInput) (*model.User, error) {
+func (u *UserService) UpdateUser(userLogin string, id string, input model.UserInput) (*model.User, error) {
 	user := u.repo.User.FindById(id)
 	err := mapstructure.Decode(input, &user)
 	if err != nil {
 		return nil, err
 	}
+	timeNow := datetime.Datetime().TimeNow().ToString()
+	user.UpdatedAt = &timeNow
+	user.UpdatedBy = &userLogin
 	err = u.repo.User.UpdateById(id, *user)
 	if err != nil {
 		return nil, err

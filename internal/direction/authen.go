@@ -27,9 +27,14 @@ func Authen(ctx context.Context, obj interface{}, next graphql.Resolver) (res in
 
 	apiSecretKey := os.Getenv("SECRET_KEY")
 
-	err = tokenValid(token, apiSecretKey)
+	claims, err := tokenValid(token, apiSecretKey)
 	if err != nil {
 		return nil, fmt.Errorf("unauthorized: %s", err)
+	}
+
+	username, ok := claims["username"].(string)
+	if ok {
+		ctx = context.WithValue(ctx, "userLogin", username)
 	}
 
 	return next(ctx)
@@ -58,7 +63,7 @@ func AuthContextMiddleware() gin.HandlerFunc {
 	}
 }
 
-func tokenValid(tokenString string, secretKey string) error {
+func tokenValid(tokenString string, secretKey string) (jwt.MapClaims, error) {
 	tokens, err := jwt.ParseWithClaims(tokenString, jwt.MapClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
@@ -66,24 +71,24 @@ func tokenValid(tokenString string, secretKey string) error {
 		return []byte(secretKey), nil
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	alg, ok := tokens.Header["alg"].(string)
 	if !ok || alg != "HS256" {
-		return AuthInvalidAlg
+		return nil, AuthInvalidAlg
 	}
 	typ, ok := tokens.Header["typ"].(string)
 	if !ok || typ != "JWT" {
-		return AuthInvalidTyp
+		return nil, AuthInvalidTyp
 	}
 	claims, ok := tokens.Claims.(jwt.MapClaims)
 	if !ok || !tokens.Valid {
-		return AuthInvalidExp
+		return nil, AuthInvalidExp
 	}
 	exp, ok := claims["exp"].(float64)
 	if !ok || time.Now().Unix() > int64(exp) {
-		return AuthInvalidExp
+		return nil, AuthInvalidExp
 	}
-	return nil
+	return claims, nil
 }

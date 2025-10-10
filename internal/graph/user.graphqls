@@ -40,10 +40,10 @@ input ListUsersRequest {
 extend type Query {
     login(username: String!, password: String!): LoginResponse!
     listUsers(request: ListUsersRequest): [User] @authen
-    getUserById(id: String!): User
+    getUserById(id: String!): User @authen
 }
 
 extend type Mutation {
-    createUser(input: UserInput!): User @hasPermission(action: "user.create")
-    updateUser(id: String!, input: UserInput!): User @hasPermission(action: "user.update")
+    createUser(input: UserInput!): User @authen @hasPermission(action: "user.create")
+    updateUser(id: String!, input: UserInput!): User @authen @hasPermission(action: "user.update")
 }

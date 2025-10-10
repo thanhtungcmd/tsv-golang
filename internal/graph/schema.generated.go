@@ -165,6 +165,13 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
+				if ec.directives.Authen == nil {
+					var zeroVal *model.User
+					return zeroVal, errors.New("directive authen is not implemented")
+				}
+				return ec.directives.Authen(ctx, nil, directive0)
+			}
+			directive2 := func(ctx context.Context) (any, error) {
 				action, err := ec.unmarshalNString2string(ctx, "user.create")
 				if err != nil {
 					var zeroVal *model.User
@@ -174,10 +181,10 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 					var zeroVal *model.User
 					return zeroVal, errors.New("directive hasPermission is not implemented")
 				}
-				return ec.directives.HasPermission(ctx, nil, directive0, action)
+				return ec.directives.HasPermission(ctx, nil, directive1, action)
 			}
 
-			next = directive1
+			next = directive2
 			return next
 		},
 		ec.marshalOUser2ᚖtsvᚑgolangᚋinternalᚋgraphᚋmodelᚐUser,
@@ -250,6 +257,13 @@ func (ec *executionContext) _Mutation_updateUser(ctx context.Context, field grap
 			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
+				if ec.directives.Authen == nil {
+					var zeroVal *model.User
+					return zeroVal, errors.New("directive authen is not implemented")
+				}
+				return ec.directives.Authen(ctx, nil, directive0)
+			}
+			directive2 := func(ctx context.Context) (any, error) {
 				action, err := ec.unmarshalNString2string(ctx, "user.update")
 				if err != nil {
 					var zeroVal *model.User
@@ -259,10 +273,10 @@ func (ec *executionContext) _Mutation_updateUser(ctx context.Context, field grap
 					var zeroVal *model.User
 					return zeroVal, errors.New("directive hasPermission is not implemented")
 				}
-				return ec.directives.HasPermission(ctx, nil, directive0, action)
+				return ec.directives.HasPermission(ctx, nil, directive1, action)
 			}
 
-			next = directive1
+			next = directive2
 			return next
 		},
 		ec.marshalOUser2ᚖtsvᚑgolangᚋinternalᚋgraphᚋmodelᚐUser,
@@ -458,7 +472,20 @@ func (ec *executionContext) _Query_getUserById(ctx context.Context, field graphq
 			fc := graphql.GetFieldContext(ctx)
 			return ec.resolvers.Query().GetUserByID(ctx, fc.Args["id"].(string))
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.directives.Authen == nil {
+					var zeroVal *model.User
+					return zeroVal, errors.New("directive authen is not implemented")
+				}
+				return ec.directives.Authen(ctx, nil, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		ec.marshalOUser2ᚖtsvᚑgolangᚋinternalᚋgraphᚋmodelᚐUser,
 		true,
 		false,

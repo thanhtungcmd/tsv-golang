@@ -11,12 +11,14 @@ import (
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
-	return r.Service.UserService.CreateUser(input)
+	userLogin := ctx.Value("userLogin").(string)
+	return r.Service.UserService.CreateUser(userLogin, input)
 }
 
 // UpdateUser is the resolver for the updateUser field.
 func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input model.UserInput) (*model.User, error) {
-	return r.Service.UserService.UpdateUser(id, input)
+	userLogin := ctx.Value("userLogin").(string)
+	return r.Service.UserService.UpdateUser(userLogin, id, input)
 }
 
 // Login is the resolver for the login field.
