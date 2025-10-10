@@ -33,7 +33,7 @@ input ListUsersRequest {
 }
 
 extend type Query {
-    listUsers(request: ListUsersRequest): [User]
+    listUsers(request: ListUsersRequest): [User] @authen
     getUserById(id: String!): User
 }
 

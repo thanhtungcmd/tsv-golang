@@ -18,6 +18,7 @@ type UserRepositoryInterface interface {
 	CreateAndReturn(model *model.User) (*model.User, error)
 	Login(username string) (*model.User, error)
 	FindById(id string) *model.User
+	UpdateById(id string, model model.User) error
 }
 
 func UserRepositoryInit(db *gorm.DB) *UserRepository {
@@ -80,4 +81,12 @@ func (repo UserRepository) FindById(id string) *model.User {
 		return nil
 	}
 	return user
+}
+
+func (repo UserRepository) UpdateById(id string, model model.User) error {
+	item := repo.db.Table("balheh.tb_users").Where("id = ?", id).Updates(model)
+	if item.RowsAffected == 0 {
+		return item.Error
+	}
+	return nil
 }

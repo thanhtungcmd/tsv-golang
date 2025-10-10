@@ -16,6 +16,8 @@ import (
 )
 
 func HandleApiV1(route *gin.RouterGroup, repo repository.Repositories) {
+	route.Use(direction.AuthContextMiddleware())
+
 	authHandler := ApiAuthHandlerInit(repo)
 	route.POST("auth/login", authHandler.Login)
 
@@ -32,6 +34,7 @@ func graphqlHandler(repo repository.Repositories) gin.HandlerFunc {
 	}}
 	cfg.Directives.HasPermission = direction.HasPermission(&repo)
 	cfg.Directives.Validate = direction.Validate
+	cfg.Directives.Authen = direction.Authen
 
 	h := handlerGraph.New(graph.NewExecutableSchema(cfg))
 

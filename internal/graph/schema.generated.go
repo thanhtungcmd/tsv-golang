@@ -314,7 +314,20 @@ func (ec *executionContext) _Query_listUsers(ctx context.Context, field graphql.
 			fc := graphql.GetFieldContext(ctx)
 			return ec.resolvers.Query().ListUsers(ctx, fc.Args["request"].(*model.ListUsersRequest))
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.directives.Authen == nil {
+					var zeroVal []*model.User
+					return zeroVal, errors.New("directive authen is not implemented")
+				}
+				return ec.directives.Authen(ctx, nil, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		ec.marshalOUser2ᚕᚖtsvᚑgolangᚋinternalᚋgraphᚋmodelᚐUser,
 		true,
 		false,

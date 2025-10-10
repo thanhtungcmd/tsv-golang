@@ -11,6 +11,8 @@ directive @validate(
     pattern: String
 ) on INPUT_FIELD_DEFINITION
 
+directive @authen on FIELD_DEFINITION
+
 type Query
 
 type Mutation

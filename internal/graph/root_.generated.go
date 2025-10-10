@@ -40,6 +40,7 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
+	Authen        func(ctx context.Context, obj any, next graphql.Resolver) (res any, err error)
 	HasPermission func(ctx context.Context, obj any, next graphql.Resolver, action string) (res any, err error)
 	Validate      func(ctx context.Context, obj any, next graphql.Resolver, required *bool, minLength *int, maxLength *int, pattern *string) (res any, err error)
 }
