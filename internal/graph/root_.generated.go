@@ -52,6 +52,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
+		ChangePassword func(childComplexity int, email string, verifyCode string, password *string) int
 		CreateUser     func(childComplexity int, input model.UserInput) int
 		ForgetPassword func(childComplexity int, email string) int
 		UpdateUser     func(childComplexity int, id string, input model.UserUpdateInput) int
@@ -76,6 +77,7 @@ type ComplexityRoot struct {
 		UpdatedBy   func(childComplexity int) int
 		UseYn       func(childComplexity int) int
 		Username    func(childComplexity int) int
+		VerifyCode  func(childComplexity int) int
 	}
 }
 
@@ -111,6 +113,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.LoginResponse.User(childComplexity), true
+
+	case "Mutation.changePassword":
+		if e.complexity.Mutation.ChangePassword == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_changePassword_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ChangePassword(childComplexity, args["email"].(string), args["verify_code"].(string), args["password"].(*string)), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -267,6 +281,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.User.Username(childComplexity), true
+
+	case "User.verify_code":
+		if e.complexity.User.VerifyCode == nil {
+			break
+		}
+
+		return e.complexity.User.VerifyCode(childComplexity), true
 
 	}
 	return 0, false

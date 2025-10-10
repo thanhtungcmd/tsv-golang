@@ -21,6 +21,7 @@ type UserRepositoryInterface interface {
 	UpdateById(id string, model model.User) error
 	FindByUsername(username string) *model.User
 	FindByEmail(email string) *model.User
+	UpdateByConditions(id string, model model.User, fieldsUpdate ...string) error
 }
 
 func UserRepositoryInit(db *gorm.DB) *UserRepository {
@@ -105,6 +106,14 @@ func (repo UserRepository) FindByEmail(email string) *model.User {
 
 func (repo UserRepository) UpdateById(id string, model model.User) error {
 	item := repo.db.Table("balheh.tb_users").Where("id = ?", id).Updates(model)
+	if item.RowsAffected == 0 {
+		return item.Error
+	}
+	return nil
+}
+
+func (repo UserRepository) UpdateByConditions(id string, model model.User, fieldsUpdate ...string) error {
+	item := repo.db.Table("balheh.tb_users").Select(fieldsUpdate).Where("id = ?", id).Updates(model)
 	if item.RowsAffected == 0 {
 		return item.Error
 	}

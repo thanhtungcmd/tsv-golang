@@ -32,6 +32,7 @@ type User struct {
 	UpdatedAt   *string `json:"updated_at,omitempty"`
 	CreatedBy   *string `json:"created_by,omitempty"`
 	UpdatedBy   *string `json:"updated_by,omitempty"`
+	VerifyCode  *string `json:"verify_code,omitempty"`
 }
 
 type UserInput struct {

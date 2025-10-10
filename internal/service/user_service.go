@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"math/rand/v2"
 	"os"
 	"time"
 	"tsv-golang/internal/graph/model"
@@ -125,9 +126,17 @@ func (u *UserService) ForgetPassword(email string) (*string, error) {
 	if user == nil {
 		return nil, fmt.Errorf("user not found")
 	}
+	// Save Code
+	code := fmt.Sprintf("%06d", rand.IntN(1_000_000))
+	user.VerifyCode = &code
+	err := u.repo.User.UpdateByConditions(user.ID, *user, []string{"verify_code"}...)
+	if err != nil {
+		return nil, err
+	}
+	// Send mail
 	to := make([]string, 0)
 	to = append(to, email)
-	err := mail.SendEmail(to, "Quên mật khẩu", "123456")
+	err = mail.SendEmail(to, "Quên mật khẩu", fmt.Sprintf("Verify Code: %s", code))
 	if err != nil {
 		return nil, err
 	}
