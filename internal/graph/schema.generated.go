@@ -18,7 +18,7 @@ import (
 
 type MutationResolver interface {
 	ForgetPassword(ctx context.Context, email string) (*string, error)
-	ChangePassword(ctx context.Context, email string, verifyCode string, password *string) (*string, error)
+	ChangePassword(ctx context.Context, email string, verifyCode string, password string) (*string, error)
 	CreateUser(ctx context.Context, input model.UserInput) (*model.User, error)
 	UpdateUser(ctx context.Context, id string, input model.UserUpdateInput) (*model.User, error)
 }
@@ -82,12 +82,63 @@ func (ec *executionContext) field_Mutation_changePassword_args(ctx context.Conte
 		return nil, err
 	}
 	args["verify_code"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "password", ec.unmarshalOString2ᚖstring)
+
+	arg2, err := ec.field_Mutation_changePassword_argsPassword(ctx, rawArgs)
 	if err != nil {
 		return nil, err
 	}
 	args["password"] = arg2
 	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_changePassword_argsPassword(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (string, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
+	directive0 := func(ctx context.Context) (any, error) {
+		tmp, ok := rawArgs["password"]
+		if !ok {
+			var zeroVal string
+			return zeroVal, nil
+		}
+		return ec.unmarshalNString2string(ctx, tmp)
+	}
+
+	directive1 := func(ctx context.Context) (any, error) {
+		required, err := ec.unmarshalOBoolean2ᚖbool(ctx, true)
+		if err != nil {
+			var zeroVal string
+			return zeroVal, err
+		}
+		minLength, err := ec.unmarshalOInt2ᚖint(ctx, 8)
+		if err != nil {
+			var zeroVal string
+			return zeroVal, err
+		}
+		maxLength, err := ec.unmarshalOInt2ᚖint(ctx, 50)
+		if err != nil {
+			var zeroVal string
+			return zeroVal, err
+		}
+		if ec.directives.Validate == nil {
+			var zeroVal string
+			return zeroVal, errors.New("directive validate is not implemented")
+		}
+		return ec.directives.Validate(ctx, rawArgs, directive0, required, minLength, maxLength, nil)
+	}
+
+	tmp, err := directive1(ctx)
+	if err != nil {
+		var zeroVal string
+		return zeroVal, graphql.ErrorOnPath(ctx, err)
+	}
+	if data, ok := tmp.(string); ok {
+		return data, nil
+	} else {
+		var zeroVal string
+		return zeroVal, graphql.ErrorOnPath(ctx, fmt.Errorf(`unexpected type %T from directive, should be string`, tmp))
+	}
 }
 
 func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
@@ -234,7 +285,7 @@ func (ec *executionContext) _Mutation_changePassword(ctx context.Context, field 
 		ec.fieldContext_Mutation_changePassword,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().ChangePassword(ctx, fc.Args["email"].(string), fc.Args["verify_code"].(string), fc.Args["password"].(*string))
+			return ec.resolvers.Mutation().ChangePassword(ctx, fc.Args["email"].(string), fc.Args["verify_code"].(string), fc.Args["password"].(string))
 		},
 		nil,
 		ec.marshalOString2ᚖstring,

@@ -9,7 +9,7 @@ directive @validate(
     minLength: Int,
     maxLength: Int,
     pattern: String
-) on INPUT_FIELD_DEFINITION
+) on INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION
 
 directive @authen on FIELD_DEFINITION
 

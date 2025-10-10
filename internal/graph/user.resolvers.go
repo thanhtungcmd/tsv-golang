@@ -6,7 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"tsv-golang/internal/graph/model"
 )
 
@@ -16,8 +15,8 @@ func (r *mutationResolver) ForgetPassword(ctx context.Context, email string) (*s
 }
 
 // ChangePassword is the resolver for the changePassword field.
-func (r *mutationResolver) ChangePassword(ctx context.Context, email string, verifyCode string, password *string) (*string, error) {
-	panic(fmt.Errorf("not implemented: ChangePassword - changePassword"))
+func (r *mutationResolver) ChangePassword(ctx context.Context, email string, verifyCode string, password string) (*string, error) {
+	return r.Service.UserService.ChangePassword(email, verifyCode, password)
 }
 
 // CreateUser is the resolver for the createUser field.

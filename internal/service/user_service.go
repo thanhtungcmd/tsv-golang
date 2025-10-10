@@ -19,8 +19,10 @@ type UserService struct {
 	repo *repository.Repositories
 }
 
-var userActive = 1
-var userInActive = 0
+var (
+	userActive   = 1
+	userInActive = 0
+)
 
 type UserServiceInterface interface {
 	CreateUser(userLogin string, input model.UserInput) (*model.User, error)
@@ -29,6 +31,7 @@ type UserServiceInterface interface {
 	UpdateUser(userLogin string, id string, input model.UserUpdateInput) (*model.User, error)
 	Login(username string, password string) (*model.LoginResponse, error)
 	ForgetPassword(email string) (*string, error)
+	ChangePassword(email string, verifyCode string, password string) (*string, error)
 }
 
 func UserServiceInit(repo *repository.Repositories) *UserService {
@@ -137,6 +140,24 @@ func (u *UserService) ForgetPassword(email string) (*string, error) {
 	to := make([]string, 0)
 	to = append(to, email)
 	err = mail.SendEmail(to, "Quên mật khẩu", fmt.Sprintf("Verify Code: %s", code))
+	if err != nil {
+		return nil, err
+	}
+	return &email, nil
+}
+
+func (u *UserService) ChangePassword(email string, verifyCode string, password string) (*string, error) {
+	user := u.repo.User.FindByVerifyCode(email, verifyCode)
+	if user == nil {
+		return nil, fmt.Errorf("user not found")
+	}
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
+	user.Password = string(hashedPassword)
+	user.VerifyCode = nil
+	err = u.repo.User.UpdateByConditions(user.ID, *user, []string{"password, verify_code"}...)
 	if err != nil {
 		return nil, err
 	}

@@ -22,6 +22,7 @@ type UserRepositoryInterface interface {
 	FindByUsername(username string) *model.User
 	FindByEmail(email string) *model.User
 	UpdateByConditions(id string, model model.User, fieldsUpdate ...string) error
+	FindByVerifyCode(email string, verifyCode string) *model.User
 }
 
 func UserRepositoryInit(db *gorm.DB) *UserRepository {
@@ -98,6 +99,15 @@ func (repo UserRepository) FindByUsername(username string) *model.User {
 func (repo UserRepository) FindByEmail(email string) *model.User {
 	var user *model.User
 	item := repo.db.Table("balheh.tb_users").Take(&user, "email = ?", email)
+	if item.RowsAffected == 0 {
+		return nil
+	}
+	return user
+}
+
+func (repo UserRepository) FindByVerifyCode(email string, verifyCode string) *model.User {
+	var user *model.User
+	item := repo.db.Table("balheh.tb_users").Take(&user, "email = ? and verify_code = ?", email, verifyCode)
 	if item.RowsAffected == 0 {
 		return nil
 	}
