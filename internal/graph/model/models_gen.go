@@ -32,7 +32,7 @@ type User struct {
 type UserInput struct {
 	Username    string  `json:"username"`
 	Password    string  `json:"password"`
-	Email       *string `json:"email,omitempty"`
+	Email       string  `json:"email"`
 	PhoneNumber *string `json:"phone_number,omitempty"`
 	LastName    *string `json:"last_name,omitempty"`
 	FirstName   *string `json:"first_name,omitempty"`

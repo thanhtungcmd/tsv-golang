@@ -512,16 +512,16 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj any
 			}
 		case "email":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalNString2string(ctx, v) }
 
 			directive1 := func(ctx context.Context) (any, error) {
 				required, err := ec.unmarshalOBoolean2ᚖbool(ctx, true)
 				if err != nil {
-					var zeroVal *string
+					var zeroVal string
 					return zeroVal, err
 				}
 				if ec.directives.Validate == nil {
-					var zeroVal *string
+					var zeroVal string
 					return zeroVal, errors.New("directive validate is not implemented")
 				}
 				return ec.directives.Validate(ctx, obj, directive0, required, nil, nil, nil)
@@ -531,12 +531,10 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj any
 			if err != nil {
 				return it, graphql.ErrorOnPath(ctx, err)
 			}
-			if data, ok := tmp.(*string); ok {
+			if data, ok := tmp.(string); ok {
 				it.Email = data
-			} else if tmp == nil {
-				it.Email = nil
 			} else {
-				err := fmt.Errorf(`unexpected type %T from directive, should be *string`, tmp)
+				err := fmt.Errorf(`unexpected type %T from directive, should be string`, tmp)
 				return it, graphql.ErrorOnPath(ctx, err)
 			}
 		case "phone_number":
@@ -549,11 +547,21 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj any
 					var zeroVal *string
 					return zeroVal, err
 				}
+				minLength, err := ec.unmarshalOInt2ᚖint(ctx, 10)
+				if err != nil {
+					var zeroVal *string
+					return zeroVal, err
+				}
+				maxLength, err := ec.unmarshalOInt2ᚖint(ctx, 11)
+				if err != nil {
+					var zeroVal *string
+					return zeroVal, err
+				}
 				if ec.directives.Validate == nil {
 					var zeroVal *string
 					return zeroVal, errors.New("directive validate is not implemented")
 				}
-				return ec.directives.Validate(ctx, obj, directive0, required, nil, nil, nil)
+				return ec.directives.Validate(ctx, obj, directive0, required, minLength, maxLength, nil)
 			}
 
 			tmp, err := directive1(ctx)
@@ -573,7 +581,12 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj any
 			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
 
 			directive1 := func(ctx context.Context) (any, error) {
-				required, err := ec.unmarshalOBoolean2ᚖbool(ctx, true)
+				required, err := ec.unmarshalOBoolean2ᚖbool(ctx, false)
+				if err != nil {
+					var zeroVal *string
+					return zeroVal, err
+				}
+				maxLength, err := ec.unmarshalOInt2ᚖint(ctx, 50)
 				if err != nil {
 					var zeroVal *string
 					return zeroVal, err
@@ -582,7 +595,7 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj any
 					var zeroVal *string
 					return zeroVal, errors.New("directive validate is not implemented")
 				}
-				return ec.directives.Validate(ctx, obj, directive0, required, nil, nil, nil)
+				return ec.directives.Validate(ctx, obj, directive0, required, nil, maxLength, nil)
 			}
 
 			tmp, err := directive1(ctx)
@@ -602,7 +615,12 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj any
 			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
 
 			directive1 := func(ctx context.Context) (any, error) {
-				required, err := ec.unmarshalOBoolean2ᚖbool(ctx, true)
+				required, err := ec.unmarshalOBoolean2ᚖbool(ctx, false)
+				if err != nil {
+					var zeroVal *string
+					return zeroVal, err
+				}
+				maxLength, err := ec.unmarshalOInt2ᚖint(ctx, 50)
 				if err != nil {
 					var zeroVal *string
 					return zeroVal, err
@@ -611,7 +629,7 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj any
 					var zeroVal *string
 					return zeroVal, errors.New("directive validate is not implemented")
 				}
-				return ec.directives.Validate(ctx, obj, directive0, required, nil, nil, nil)
+				return ec.directives.Validate(ctx, obj, directive0, required, nil, maxLength, nil)
 			}
 
 			tmp, err := directive1(ctx)

@@ -20,10 +20,10 @@ type User {
 input UserInput {
     username: String! @validate(required: true, minLength: 8, maxLength: 50)
     password: String! @validate(required: true, minLength: 8, maxLength: 50)
-    email: String @validate(required: true)
-    phone_number: String @validate(required: true)
-    last_name: String @validate(required: true)
-    first_name: String @validate(required: true)
+    email: String! @validate(required: true)
+    phone_number: String @validate(required: true, minLength: 10, maxLength: 11)
+    last_name: String @validate(required: false, maxLength: 50)
+    first_name: String @validate(required: false, maxLength: 50)
 }
 
 input ListUsersRequest {
@@ -39,4 +39,5 @@ extend type Query {
 
 extend type Mutation {
     createUser(input: UserInput!): User @hasPermission(action: "user.create")
+    updateUser(id: String!, input: UserInput!): User @hasPermission(action: "user.update")
 }

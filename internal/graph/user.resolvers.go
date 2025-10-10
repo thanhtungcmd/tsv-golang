@@ -6,12 +6,18 @@ package graph
 
 import (
 	"context"
+	"fmt"
 	"tsv-golang/internal/graph/model"
 )
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
 	return r.Service.UserService.CreateUser(input)
+}
+
+// UpdateUser is the resolver for the updateUser field.
+func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input model.UserInput) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: UpdateUser - updateUser"))
 }
 
 // ListUsers is the resolver for the listUsers field.
