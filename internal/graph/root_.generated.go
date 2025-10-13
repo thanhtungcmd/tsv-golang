@@ -56,6 +56,7 @@ type ComplexityRoot struct {
 		SortOrder   func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
 		UpdatedBy   func(childComplexity int) int
+		UseYn       func(childComplexity int) int
 	}
 
 	LoginResponse struct {
@@ -152,14 +153,14 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Board.Name(childComplexity), true
 
-	case "Board.projectId":
+	case "Board.project_id":
 		if e.complexity.Board.ProjectID == nil {
 			break
 		}
 
 		return e.complexity.Board.ProjectID(childComplexity), true
 
-	case "Board.sortOrder":
+	case "Board.sort_order":
 		if e.complexity.Board.SortOrder == nil {
 			break
 		}
@@ -179,6 +180,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Board.UpdatedBy(childComplexity), true
+
+	case "Board.use_yn":
+		if e.complexity.Board.UseYn == nil {
+			break
+		}
+
+		return e.complexity.Board.UseYn(childComplexity), true
 
 	case "LoginResponse.access_token":
 		if e.complexity.LoginResponse.AccessToken == nil {

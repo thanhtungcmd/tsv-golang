@@ -6,7 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"tsv-golang/internal/graph/model"
 )
 
@@ -23,16 +22,17 @@ func (r *mutationResolver) UpdateBoard(ctx context.Context, id string, input mod
 }
 
 // DeleteBoard is the resolver for the deleteBoard field.
-func (r *mutationResolver) DeleteBoard(ctx context.Context, id string) (string, error) {
-	panic(fmt.Errorf("not implemented: DeleteBoard - deleteBoard"))
+func (r *mutationResolver) DeleteBoard(ctx context.Context, id string) (*string, error) {
+	userLogin := ctx.Value("userLogin").(string)
+	return r.Service.BoardService.DeleteBoard(userLogin, id)
 }
 
 // ListBoard is the resolver for the listBoard field.
 func (r *queryResolver) ListBoard(ctx context.Context, request *model.ListBoardRequest) ([]*model.Board, error) {
-	panic(fmt.Errorf("not implemented: ListBoard - listBoard"))
+	return r.Service.BoardService.ListBoard(request)
 }
 
 // GetBoardByID is the resolver for the getBoardById field.
 func (r *queryResolver) GetBoardByID(ctx context.Context, id string) (*model.Board, error) {
-	panic(fmt.Errorf("not implemented: GetBoardByID - getBoardById"))
+	return r.Service.BoardService.GetBoardByID(id)
 }

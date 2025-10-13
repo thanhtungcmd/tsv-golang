@@ -19,7 +19,7 @@ import (
 type MutationResolver interface {
 	CreateBoard(ctx context.Context, input *model.BoardInput) (*model.Board, error)
 	UpdateBoard(ctx context.Context, id string, input model.BoardUpdateInput) (*model.Board, error)
-	DeleteBoard(ctx context.Context, id string) (string, error)
+	DeleteBoard(ctx context.Context, id string) (*string, error)
 	ForgetPassword(ctx context.Context, email string) (*string, error)
 	ChangePassword(ctx context.Context, email string, verifyCode string, password string) (*string, error)
 	CreateUser(ctx context.Context, input model.UserInput) (*model.User, error)
@@ -341,14 +341,16 @@ func (ec *executionContext) fieldContext_Mutation_createBoard(ctx context.Contex
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Board_id(ctx, field)
-			case "projectId":
-				return ec.fieldContext_Board_projectId(ctx, field)
+			case "project_id":
+				return ec.fieldContext_Board_project_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Board_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Board_description(ctx, field)
-			case "sortOrder":
-				return ec.fieldContext_Board_sortOrder(ctx, field)
+			case "sort_order":
+				return ec.fieldContext_Board_sort_order(ctx, field)
+			case "use_yn":
+				return ec.fieldContext_Board_use_yn(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Board_createdAt(ctx, field)
 			case "updatedAt":
@@ -415,14 +417,16 @@ func (ec *executionContext) fieldContext_Mutation_updateBoard(ctx context.Contex
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Board_id(ctx, field)
-			case "projectId":
-				return ec.fieldContext_Board_projectId(ctx, field)
+			case "project_id":
+				return ec.fieldContext_Board_project_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Board_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Board_description(ctx, field)
-			case "sortOrder":
-				return ec.fieldContext_Board_sortOrder(ctx, field)
+			case "sort_order":
+				return ec.fieldContext_Board_sort_order(ctx, field)
+			case "use_yn":
+				return ec.fieldContext_Board_use_yn(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Board_createdAt(ctx, field)
 			case "updatedAt":
@@ -464,7 +468,7 @@ func (ec *executionContext) _Mutation_deleteBoard(ctx context.Context, field gra
 
 			directive1 := func(ctx context.Context) (any, error) {
 				if ec.directives.Authen == nil {
-					var zeroVal string
+					var zeroVal *string
 					return zeroVal, errors.New("directive authen is not implemented")
 				}
 				return ec.directives.Authen(ctx, nil, directive0)
@@ -473,9 +477,9 @@ func (ec *executionContext) _Mutation_deleteBoard(ctx context.Context, field gra
 			next = directive1
 			return next
 		},
-		ec.marshalNString2string,
+		ec.marshalOString2ᚖstring,
 		true,
-		true,
+		false,
 	)
 }
 
@@ -813,14 +817,16 @@ func (ec *executionContext) fieldContext_Query_listBoard(ctx context.Context, fi
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Board_id(ctx, field)
-			case "projectId":
-				return ec.fieldContext_Board_projectId(ctx, field)
+			case "project_id":
+				return ec.fieldContext_Board_project_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Board_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Board_description(ctx, field)
-			case "sortOrder":
-				return ec.fieldContext_Board_sortOrder(ctx, field)
+			case "sort_order":
+				return ec.fieldContext_Board_sort_order(ctx, field)
+			case "use_yn":
+				return ec.fieldContext_Board_use_yn(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Board_createdAt(ctx, field)
 			case "updatedAt":
@@ -887,14 +893,16 @@ func (ec *executionContext) fieldContext_Query_getBoardById(ctx context.Context,
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Board_id(ctx, field)
-			case "projectId":
-				return ec.fieldContext_Board_projectId(ctx, field)
+			case "project_id":
+				return ec.fieldContext_Board_project_id(ctx, field)
 			case "name":
 				return ec.fieldContext_Board_name(ctx, field)
 			case "description":
 				return ec.fieldContext_Board_description(ctx, field)
-			case "sortOrder":
-				return ec.fieldContext_Board_sortOrder(ctx, field)
+			case "sort_order":
+				return ec.fieldContext_Board_sort_order(ctx, field)
+			case "use_yn":
+				return ec.fieldContext_Board_use_yn(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Board_createdAt(ctx, field)
 			case "updatedAt":
@@ -1283,9 +1291,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteBoard(ctx, field)
 			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "forgetPassword":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_forgetPassword(ctx, field)

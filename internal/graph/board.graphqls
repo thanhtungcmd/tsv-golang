@@ -4,10 +4,11 @@
 
 type Board {
     id: String!
-    projectId: String
+    project_id: String
     name: String
     description: String
-    sortOrder: Int
+    sort_order: Int
+    use_yn: Int
     createdAt: String
     updatedAt: String
     createdBy: String
@@ -15,16 +16,16 @@ type Board {
 }
 
 input BoardInput {
-    projectId: String!
+    project_id: String!
     name: String! @validate(required: true, minLength: 4, maxLength: 50)
     description: String
-    sortOrder: Int
+    sort_order: Int
 }
 
 input BoardUpdateInput {
     name: String!
     description: String
-    sortOrder: Int
+    sort_order: Int
 }
 
 input ListBoardRequest {
@@ -41,5 +42,5 @@ extend type Query {
 extend type Mutation {
     createBoard(input: BoardInput): Board @authen
     updateBoard(id: String!, input: BoardUpdateInput!): Board @authen
-    deleteBoard(id: String!): String! @authen
+    deleteBoard(id: String!): String @authen
 }

@@ -4,10 +4,11 @@ package model
 
 type Board struct {
 	ID          string  `json:"id"`
-	ProjectID   *string `json:"projectId,omitempty"`
+	ProjectID   *string `json:"project_id,omitempty"`
 	Name        *string `json:"name,omitempty"`
 	Description *string `json:"description,omitempty"`
-	SortOrder   *int    `json:"sortOrder,omitempty"`
+	SortOrder   *int    `json:"sort_order,omitempty"`
+	UseYn       *int    `json:"use_yn,omitempty"`
 	CreatedAt   *string `json:"createdAt,omitempty"`
 	UpdatedAt   *string `json:"updatedAt,omitempty"`
 	CreatedBy   *string `json:"createdBy,omitempty"`
@@ -15,16 +16,16 @@ type Board struct {
 }
 
 type BoardInput struct {
-	ProjectID   string  `json:"projectId"`
+	ProjectID   string  `json:"project_id"`
 	Name        string  `json:"name"`
 	Description *string `json:"description,omitempty"`
-	SortOrder   *int    `json:"sortOrder,omitempty"`
+	SortOrder   *int    `json:"sort_order,omitempty"`
 }
 
 type BoardUpdateInput struct {
 	Name        string  `json:"name"`
 	Description *string `json:"description,omitempty"`
-	SortOrder   *int    `json:"sortOrder,omitempty"`
+	SortOrder   *int    `json:"sort_order,omitempty"`
 }
 
 type ListBoardRequest struct {

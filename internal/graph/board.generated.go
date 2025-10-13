@@ -58,12 +58,12 @@ func (ec *executionContext) fieldContext_Board_id(_ context.Context, field graph
 	return fc, nil
 }
 
-func (ec *executionContext) _Board_projectId(ctx context.Context, field graphql.CollectedField, obj *model.Board) (ret graphql.Marshaler) {
+func (ec *executionContext) _Board_project_id(ctx context.Context, field graphql.CollectedField, obj *model.Board) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_Board_projectId,
+		ec.fieldContext_Board_project_id,
 		func(ctx context.Context) (any, error) {
 			return obj.ProjectID, nil
 		},
@@ -74,7 +74,7 @@ func (ec *executionContext) _Board_projectId(ctx context.Context, field graphql.
 	)
 }
 
-func (ec *executionContext) fieldContext_Board_projectId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Board_project_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Board",
 		Field:      field,
@@ -145,12 +145,12 @@ func (ec *executionContext) fieldContext_Board_description(_ context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _Board_sortOrder(ctx context.Context, field graphql.CollectedField, obj *model.Board) (ret graphql.Marshaler) {
+func (ec *executionContext) _Board_sort_order(ctx context.Context, field graphql.CollectedField, obj *model.Board) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_Board_sortOrder,
+		ec.fieldContext_Board_sort_order,
 		func(ctx context.Context) (any, error) {
 			return obj.SortOrder, nil
 		},
@@ -161,7 +161,36 @@ func (ec *executionContext) _Board_sortOrder(ctx context.Context, field graphql.
 	)
 }
 
-func (ec *executionContext) fieldContext_Board_sortOrder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Board_sort_order(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Board",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Board_use_yn(ctx context.Context, field graphql.CollectedField, obj *model.Board) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Board_use_yn,
+		func(ctx context.Context) (any, error) {
+			return obj.UseYn, nil
+		},
+		nil,
+		ec.marshalOInt2ᚖint,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Board_use_yn(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Board",
 		Field:      field,
@@ -301,15 +330,15 @@ func (ec *executionContext) unmarshalInputBoardInput(ctx context.Context, obj an
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"projectId", "name", "description", "sortOrder"}
+	fieldsInOrder := [...]string{"project_id", "name", "description", "sort_order"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "projectId":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("projectId"))
+		case "project_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("project_id"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
@@ -359,8 +388,8 @@ func (ec *executionContext) unmarshalInputBoardInput(ctx context.Context, obj an
 				return it, err
 			}
 			it.Description = data
-		case "sortOrder":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sortOrder"))
+		case "sort_order":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sort_order"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
 				return it, err
@@ -379,7 +408,7 @@ func (ec *executionContext) unmarshalInputBoardUpdateInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "description", "sortOrder"}
+	fieldsInOrder := [...]string{"name", "description", "sort_order"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -400,8 +429,8 @@ func (ec *executionContext) unmarshalInputBoardUpdateInput(ctx context.Context, 
 				return it, err
 			}
 			it.Description = data
-		case "sortOrder":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sortOrder"))
+		case "sort_order":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sort_order"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
 				return it, err
@@ -471,14 +500,16 @@ func (ec *executionContext) _Board(ctx context.Context, sel ast.SelectionSet, ob
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "projectId":
-			out.Values[i] = ec._Board_projectId(ctx, field, obj)
+		case "project_id":
+			out.Values[i] = ec._Board_project_id(ctx, field, obj)
 		case "name":
 			out.Values[i] = ec._Board_name(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Board_description(ctx, field, obj)
-		case "sortOrder":
-			out.Values[i] = ec._Board_sortOrder(ctx, field, obj)
+		case "sort_order":
+			out.Values[i] = ec._Board_sort_order(ctx, field, obj)
+		case "use_yn":
+			out.Values[i] = ec._Board_use_yn(ctx, field, obj)
 		case "createdAt":
 			out.Values[i] = ec._Board_createdAt(ctx, field, obj)
 		case "updatedAt":

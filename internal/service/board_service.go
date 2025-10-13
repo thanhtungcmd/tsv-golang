@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"tsv-golang/internal/graph/model"
 	"tsv-golang/internal/repository"
 	"tsv-golang/pkg/datetime"
@@ -12,10 +13,17 @@ type BoardService struct {
 	repo *repository.Repositories
 }
 
+var (
+	statusActive   = 1
+	statusInActive = 0
+)
+
 type BoardServiceInterface interface {
 	CreateBoard(userLogin string, input *model.BoardInput) (*model.Board, error)
 	UpdateBoard(userLogin string, id string, input model.BoardUpdateInput) (*model.Board, error)
-	//DeleteBoard(userLogin string, id string) error
+	DeleteBoard(userLogin string, id string) (*string, error)
+	ListBoard(request *model.ListBoardRequest) ([]*model.Board, error)
+	GetBoardByID(id string) (*model.Board, error)
 }
 
 func BoardServiceInit(repo *repository.Repositories) *BoardService {
@@ -33,6 +41,7 @@ func (r *BoardService) CreateBoard(userLogin string, input *model.BoardInput) (*
 		return nil, err
 	}
 	timeNow := datetime.Datetime().TimeNow().ToString()
+	result.UseYn = &statusActive
 	result.CreatedAt = &timeNow
 	result.UpdatedAt = &timeNow
 	result.CreatedBy = &userLogin
@@ -60,17 +69,28 @@ func (r *BoardService) UpdateBoard(userLogin string, id string, input model.Boar
 	return data, nil
 }
 
-//func (r *BoardService) DeleteBoard(userLogin string, id string) error {
-//	data := r.repo.Board.FindById(id)
-//	if err != nil {
-//		return nil, err
-//	}
-//	timeNow := datetime.Datetime().TimeNow().ToString()
-//	data.UpdatedAt = &timeNow
-//	data.UpdatedBy = &userLogin
-//	err = r.repo.Board.UpdateByConditions(id, *data, []string{"use_yn"}...)
-//	if err != nil {
-//		return nil, err
-//	}
-//	return data, nil
-//}
+func (r *BoardService) DeleteBoard(userLogin string, id string) (*string, error) {
+	data := r.repo.Board.FindById(id)
+	if data == nil {
+		return nil, fmt.Errorf("board not found")
+	}
+	timeNow := datetime.Datetime().TimeNow().ToString()
+	data.UseYn = &statusInActive
+	data.UpdatedAt = &timeNow
+	data.UpdatedBy = &userLogin
+	err := r.repo.Board.UpdateByConditions(id, *data, []string{"use_yn"}...)
+	if err != nil {
+		return nil, err
+	}
+	return &id, nil
+}
+
+func (r *BoardService) ListBoard(request *model.ListBoardRequest) ([]*model.Board, error) {
+	result := r.repo.Board.GetList(request)
+	return result, nil
+}
+
+func (r *BoardService) GetBoardByID(id string) (*model.Board, error) {
+	result := r.repo.Board.FindById(id)
+	return result, nil
+}
