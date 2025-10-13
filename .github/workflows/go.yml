@@ -53,10 +53,10 @@ jobs:
           echo "${{ secrets.LIGHTSAIL_KEY_PEM }}" > /tmp/lightsail_key.pem
           chmod 600 /tmp/lightsail_key.pem
 
-          - name: Upload file Go binary
-            run: |
-              scp -i /tmp/lightsail_key.pem -o StrictHostKeyChecking=no build/app \
-                ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}:/home/${{ secrets.LIGHTSAIL_USER }}/projects/backend/app
+      - name: Upload file Go binary
+        run: |
+          scp -i /tmp/lightsail_key.pem -o StrictHostKeyChecking=no build/app \
+            ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}:/home/${{ secrets.LIGHTSAIL_USER }}/projects/backend/app
 
       - name: SSH vào server và restart dịch vụ Go
         run: |
