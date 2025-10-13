@@ -15,7 +15,7 @@ type BoardService struct {
 type BoardServiceInterface interface {
 	CreateBoard(userLogin string, input *model.BoardInput) (*model.Board, error)
 	UpdateBoard(userLogin string, id string, input model.BoardUpdateInput) (*model.Board, error)
-	DeleteBoard(userLogin string, id string) error
+	//DeleteBoard(userLogin string, id string) error
 }
 
 func BoardServiceInit(repo *repository.Repositories) *BoardService {
@@ -60,7 +60,17 @@ func (r *BoardService) UpdateBoard(userLogin string, id string, input model.Boar
 	return data, nil
 }
 
-func (r *BoardService) DeleteBoard(userLogin string, id string) error {
-	//TODO implement me
-	panic("implement me")
-}
+//func (r *BoardService) DeleteBoard(userLogin string, id string) error {
+//	data := r.repo.Board.FindById(id)
+//	if err != nil {
+//		return nil, err
+//	}
+//	timeNow := datetime.Datetime().TimeNow().ToString()
+//	data.UpdatedAt = &timeNow
+//	data.UpdatedBy = &userLogin
+//	err = r.repo.Board.UpdateByConditions(id, *data, []string{"use_yn"}...)
+//	if err != nil {
+//		return nil, err
+//	}
+//	return data, nil
+//}
