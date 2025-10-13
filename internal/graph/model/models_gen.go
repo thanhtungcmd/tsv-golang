@@ -33,6 +33,11 @@ type ListBoardRequest struct {
 	Offset *int `json:"offset,omitempty"`
 }
 
+type ListProjectRequest struct {
+	Limit  *int `json:"limit,omitempty"`
+	Offset *int `json:"offset,omitempty"`
+}
+
 type ListUsersRequest struct {
 	ID     *string `json:"id,omitempty"`
 	Limit  *int    `json:"limit,omitempty"`
@@ -45,6 +50,30 @@ type LoginResponse struct {
 }
 
 type Mutation struct {
+}
+
+type Project struct {
+	ID          string  `json:"id"`
+	Name        *string `json:"name,omitempty"`
+	Description *string `json:"description,omitempty"`
+	SortOrder   *int    `json:"sort_order,omitempty"`
+	UseYn       *int    `json:"use_yn,omitempty"`
+	CreatedAt   *string `json:"createdAt,omitempty"`
+	UpdatedAt   *string `json:"updatedAt,omitempty"`
+	CreatedBy   *string `json:"createdBy,omitempty"`
+	UpdatedBy   *string `json:"updatedBy,omitempty"`
+}
+
+type ProjectInput struct {
+	Name        string  `json:"name"`
+	Description *string `json:"description,omitempty"`
+	SortOrder   *int    `json:"sort_order,omitempty"`
+}
+
+type ProjectUpdateInput struct {
+	Name        string  `json:"name"`
+	Description *string `json:"description,omitempty"`
+	SortOrder   *int    `json:"sort_order,omitempty"`
 }
 
 type Query struct {

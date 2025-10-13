@@ -19,11 +19,6 @@ type UserService struct {
 	repo *repository.Repositories
 }
 
-var (
-	userActive   = 1
-	userInActive = 0
-)
-
 type UserServiceInterface interface {
 	CreateUser(userLogin string, input model.UserInput) (*model.User, error)
 	ListUsers(request *model.ListUsersRequest) ([]*model.User, error)
@@ -90,7 +85,7 @@ func (u *UserService) CreateUser(userLogin string, input model.UserInput) (*mode
 	user.UpdatedAt = &timeNow
 	user.CreatedBy = &userLogin
 	user.UpdatedBy = &userLogin
-	user.UseYn = &userActive
+	user.UseYn = &STATUS_ACTIVE
 	data, err := u.repo.User.CreateAndReturn(user)
 	if err != nil {
 		return nil, err

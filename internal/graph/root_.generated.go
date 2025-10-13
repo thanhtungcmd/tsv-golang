@@ -67,19 +67,36 @@ type ComplexityRoot struct {
 	Mutation struct {
 		ChangePassword func(childComplexity int, email string, verifyCode string, password string) int
 		CreateBoard    func(childComplexity int, input *model.BoardInput) int
+		CreateProject  func(childComplexity int, input *model.ProjectInput) int
 		CreateUser     func(childComplexity int, input model.UserInput) int
 		DeleteBoard    func(childComplexity int, id string) int
+		DeleteProject  func(childComplexity int, id string) int
 		ForgetPassword func(childComplexity int, email string) int
 		UpdateBoard    func(childComplexity int, id string, input model.BoardUpdateInput) int
+		UpdateProject  func(childComplexity int, id string, input model.ProjectUpdateInput) int
 		UpdateUser     func(childComplexity int, id string, input model.UserUpdateInput) int
 	}
 
+	Project struct {
+		CreatedAt   func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
+		Description func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Name        func(childComplexity int) int
+		SortOrder   func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
+		UseYn       func(childComplexity int) int
+	}
+
 	Query struct {
-		GetBoardByID func(childComplexity int, id string) int
-		GetUserByID  func(childComplexity int, id string) int
-		ListBoard    func(childComplexity int, request *model.ListBoardRequest) int
-		ListUsers    func(childComplexity int, request *model.ListUsersRequest) int
-		Login        func(childComplexity int, username string, password string) int
+		GetBoardByID   func(childComplexity int, id string) int
+		GetProjectByID func(childComplexity int, id string) int
+		GetUserByID    func(childComplexity int, id string) int
+		ListBoard      func(childComplexity int, request *model.ListBoardRequest) int
+		ListProject    func(childComplexity int, request *model.ListProjectRequest) int
+		ListUsers      func(childComplexity int, request *model.ListUsersRequest) int
+		Login          func(childComplexity int, username string, password string) int
 	}
 
 	User struct {
@@ -226,6 +243,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBoard(childComplexity, args["input"].(*model.BoardInput)), true
 
+	case "Mutation.createProject":
+		if e.complexity.Mutation.CreateProject == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createProject_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateProject(childComplexity, args["input"].(*model.ProjectInput)), true
+
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
 			break
@@ -249,6 +278,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteBoard(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteProject":
+		if e.complexity.Mutation.DeleteProject == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteProject_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteProject(childComplexity, args["id"].(string)), true
 
 	case "Mutation.forgetPassword":
 		if e.complexity.Mutation.ForgetPassword == nil {
@@ -274,6 +315,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateBoard(childComplexity, args["id"].(string), args["input"].(model.BoardUpdateInput)), true
 
+	case "Mutation.updateProject":
+		if e.complexity.Mutation.UpdateProject == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateProject_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateProject(childComplexity, args["id"].(string), args["input"].(model.ProjectUpdateInput)), true
+
 	case "Mutation.updateUser":
 		if e.complexity.Mutation.UpdateUser == nil {
 			break
@@ -286,6 +339,69 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateUser(childComplexity, args["id"].(string), args["input"].(model.UserUpdateInput)), true
 
+	case "Project.createdAt":
+		if e.complexity.Project.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Project.CreatedAt(childComplexity), true
+
+	case "Project.createdBy":
+		if e.complexity.Project.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Project.CreatedBy(childComplexity), true
+
+	case "Project.description":
+		if e.complexity.Project.Description == nil {
+			break
+		}
+
+		return e.complexity.Project.Description(childComplexity), true
+
+	case "Project.id":
+		if e.complexity.Project.ID == nil {
+			break
+		}
+
+		return e.complexity.Project.ID(childComplexity), true
+
+	case "Project.name":
+		if e.complexity.Project.Name == nil {
+			break
+		}
+
+		return e.complexity.Project.Name(childComplexity), true
+
+	case "Project.sort_order":
+		if e.complexity.Project.SortOrder == nil {
+			break
+		}
+
+		return e.complexity.Project.SortOrder(childComplexity), true
+
+	case "Project.updatedAt":
+		if e.complexity.Project.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Project.UpdatedAt(childComplexity), true
+
+	case "Project.updatedBy":
+		if e.complexity.Project.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Project.UpdatedBy(childComplexity), true
+
+	case "Project.use_yn":
+		if e.complexity.Project.UseYn == nil {
+			break
+		}
+
+		return e.complexity.Project.UseYn(childComplexity), true
+
 	case "Query.getBoardById":
 		if e.complexity.Query.GetBoardByID == nil {
 			break
@@ -297,6 +413,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.GetBoardByID(childComplexity, args["id"].(string)), true
+
+	case "Query.getProjectById":
+		if e.complexity.Query.GetProjectByID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getProjectById_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetProjectByID(childComplexity, args["id"].(string)), true
 
 	case "Query.getUserById":
 		if e.complexity.Query.GetUserByID == nil {
@@ -321,6 +449,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.ListBoard(childComplexity, args["request"].(*model.ListBoardRequest)), true
+
+	case "Query.listProject":
+		if e.complexity.Query.ListProject == nil {
+			break
+		}
+
+		args, err := ec.field_Query_listProject_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ListProject(childComplexity, args["request"].(*model.ListProjectRequest)), true
 
 	case "Query.listUsers":
 		if e.complexity.Query.ListUsers == nil {
@@ -448,7 +588,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputBoardInput,
 		ec.unmarshalInputBoardUpdateInput,
 		ec.unmarshalInputListBoardRequest,
+		ec.unmarshalInputListProjectRequest,
 		ec.unmarshalInputListUsersRequest,
+		ec.unmarshalInputProjectInput,
+		ec.unmarshalInputProjectUpdateInput,
 		ec.unmarshalInputUserInput,
 		ec.unmarshalInputUserUpdateInput,
 	)
@@ -547,7 +690,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(ec.Schema(), ec.Schema().Types[name]), nil
 }
 
-//go:embed "board.graphqls" "schema.graphqls" "user.graphqls"
+//go:embed "board.graphqls" "project.graphqls" "schema.graphqls" "user.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -560,6 +703,7 @@ func sourceData(filename string) string {
 
 var sources = []*ast.Source{
 	{Name: "board.graphqls", Input: sourceData("board.graphqls"), BuiltIn: false},
+	{Name: "project.graphqls", Input: sourceData("project.graphqls"), BuiltIn: false},
 	{Name: "schema.graphqls", Input: sourceData("schema.graphqls"), BuiltIn: false},
 	{Name: "user.graphqls", Input: sourceData("user.graphqls"), BuiltIn: false},
 }

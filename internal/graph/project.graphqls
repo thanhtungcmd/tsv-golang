@@ -1,0 +1,44 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type Project {
+    id: String!
+    name: String
+    description: String
+    sort_order: Int
+    use_yn: Int
+    createdAt: String
+    updatedAt: String
+    createdBy: String
+    updatedBy: String
+}
+
+input ProjectInput {
+    name: String! @validate(required: true, minLength: 4, maxLength: 50)
+    description: String
+    sort_order: Int
+}
+
+input ProjectUpdateInput {
+    name: String!
+    description: String
+    sort_order: Int
+}
+
+input ListProjectRequest {
+    limit: Int
+    offset: Int
+}
+
+
+extend type Query {
+    listProject(request: ListProjectRequest): [Project] @authen
+    getProjectById(id: String!): Project @authen
+}
+
+extend type Mutation {
+    createProject(input: ProjectInput): Project @authen
+    updateProject(id: String!, input: ProjectUpdateInput!): Project @authen
+    deleteProject(id: String!): String @authen
+}

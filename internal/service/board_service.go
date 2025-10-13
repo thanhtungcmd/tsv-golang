@@ -13,11 +13,6 @@ type BoardService struct {
 	repo *repository.Repositories
 }
 
-var (
-	statusActive   = 1
-	statusInActive = 0
-)
-
 type BoardServiceInterface interface {
 	CreateBoard(userLogin string, input *model.BoardInput) (*model.Board, error)
 	UpdateBoard(userLogin string, id string, input model.BoardUpdateInput) (*model.Board, error)
@@ -41,7 +36,7 @@ func (r *BoardService) CreateBoard(userLogin string, input *model.BoardInput) (*
 		return nil, err
 	}
 	timeNow := datetime.Datetime().TimeNow().ToString()
-	result.UseYn = &statusActive
+	result.UseYn = &STATUS_ACTIVE
 	result.CreatedAt = &timeNow
 	result.UpdatedAt = &timeNow
 	result.CreatedBy = &userLogin
@@ -75,7 +70,7 @@ func (r *BoardService) DeleteBoard(userLogin string, id string) (*string, error)
 		return nil, fmt.Errorf("board not found")
 	}
 	timeNow := datetime.Datetime().TimeNow().ToString()
-	data.UseYn = &statusInActive
+	data.UseYn = &STATUS_IN_ACTIVE
 	data.UpdatedAt = &timeNow
 	data.UpdatedBy = &userLogin
 	err := r.repo.Board.UpdateByConditions(id, *data, []string{"use_yn"}...)
