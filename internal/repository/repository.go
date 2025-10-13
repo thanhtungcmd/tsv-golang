@@ -13,10 +13,11 @@ import (
 )
 
 type Repositories struct {
-	DB      *gorm.DB
-	User    UserRepositoryInterface
-	Board   BoardRepositoryInterface
-	Project ProjectRepositoryInterface
+	DB        *gorm.DB
+	User      UserRepositoryInterface
+	Board     BoardRepositoryInterface
+	BoardList BoardListRepositoryInterface
+	Project   ProjectRepositoryInterface
 }
 
 func NewRepositories() (*Repositories, error) {
@@ -47,10 +48,11 @@ func NewRepositories() (*Repositories, error) {
 		db = db.Debug()
 	}
 	return &Repositories{
-		DB:      db,
-		User:    UserRepositoryInit(db),
-		Board:   BoardRepositoryInit(db),
-		Project: ProjectRepositoryInit(db),
+		DB:        db,
+		User:      UserRepositoryInit(db),
+		Board:     BoardRepositoryInit(db),
+		BoardList: BoardListRepositoryInit(db),
+		Project:   ProjectRepositoryInit(db),
 	}, nil
 }
 

@@ -30,6 +30,10 @@ func BoardServiceInit(repo *repository.Repositories) *BoardService {
 var _ BoardServiceInterface = &BoardService{}
 
 func (r *BoardService) CreateBoard(userLogin string, input *model.BoardInput) (*model.Board, error) {
+	project := r.repo.Project.FindById(input.ProjectID)
+	if project == nil {
+		return nil, fmt.Errorf("project not found")
+	}
 	result := &model.Board{}
 	err := mapstructure.Decode(input, &result)
 	if err != nil {

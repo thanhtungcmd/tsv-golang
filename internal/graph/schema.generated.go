@@ -20,6 +20,9 @@ type MutationResolver interface {
 	CreateBoard(ctx context.Context, input *model.BoardInput) (*model.Board, error)
 	UpdateBoard(ctx context.Context, id string, input model.BoardUpdateInput) (*model.Board, error)
 	DeleteBoard(ctx context.Context, id string) (*string, error)
+	CreateBoardList(ctx context.Context, input *model.BoardListInput) (*model.BoardList, error)
+	UpdateBoardList(ctx context.Context, id string, input model.BoardListUpdateInput) (*model.BoardList, error)
+	DeleteBoardList(ctx context.Context, id string) (*string, error)
 	CreateProject(ctx context.Context, input *model.ProjectInput) (*model.Project, error)
 	UpdateProject(ctx context.Context, id string, input model.ProjectUpdateInput) (*model.Project, error)
 	DeleteProject(ctx context.Context, id string) (*string, error)
@@ -31,6 +34,8 @@ type MutationResolver interface {
 type QueryResolver interface {
 	ListBoard(ctx context.Context, request *model.ListBoardRequest) ([]*model.Board, error)
 	GetBoardByID(ctx context.Context, id string) (*model.Board, error)
+	ListBoardList(ctx context.Context, request *model.ListBoardListRequest) ([]*model.BoardList, error)
+	GetBoardListByID(ctx context.Context, id string) (*model.BoardList, error)
 	ListProject(ctx context.Context, request *model.ListProjectRequest) ([]*model.Project, error)
 	GetProjectByID(ctx context.Context, id string) (*model.Project, error)
 	Login(ctx context.Context, username string, password string) (*model.LoginResponse, error)
@@ -151,6 +156,17 @@ func (ec *executionContext) field_Mutation_changePassword_argsPassword(
 	}
 }
 
+func (ec *executionContext) field_Mutation_createBoardList_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOBoardListInput2ᚖtsvᚑgolangᚋinternalᚋgraphᚋmodelᚐBoardListInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createBoard_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -184,6 +200,17 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_deleteBoardList_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNString2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_deleteBoard_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -214,6 +241,22 @@ func (ec *executionContext) field_Mutation_forgetPassword_args(ctx context.Conte
 		return nil, err
 	}
 	args["email"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateBoardList_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNString2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNBoardListUpdateInput2tsvᚑgolangᚋinternalᚋgraphᚋmodelᚐBoardListUpdateInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -287,6 +330,17 @@ func (ec *executionContext) field_Query_getBoardById_args(ctx context.Context, r
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_getBoardListById_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNString2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_getProjectById_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -306,6 +360,17 @@ func (ec *executionContext) field_Query_getUserById_args(ctx context.Context, ra
 		return nil, err
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_listBoardList_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "request", ec.unmarshalOListBoardListRequest2ᚖtsvᚑgolangᚋinternalᚋgraphᚋmodelᚐListBoardListRequest)
+	if err != nil {
+		return nil, err
+	}
+	args["request"] = arg0
 	return args, nil
 }
 
@@ -566,6 +631,208 @@ func (ec *executionContext) fieldContext_Mutation_deleteBoard(ctx context.Contex
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteBoard_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createBoardList(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createBoardList,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateBoardList(ctx, fc.Args["input"].(*model.BoardListInput))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.directives.Authen == nil {
+					var zeroVal *model.BoardList
+					return zeroVal, errors.New("directive authen is not implemented")
+				}
+				return ec.directives.Authen(ctx, nil, directive0)
+			}
+
+			next = directive1
+			return next
+		},
+		ec.marshalOBoardList2ᚖtsvᚑgolangᚋinternalᚋgraphᚋmodelᚐBoardList,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createBoardList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_BoardList_id(ctx, field)
+			case "board_id":
+				return ec.fieldContext_BoardList_board_id(ctx, field)
+			case "name":
+				return ec.fieldContext_BoardList_name(ctx, field)
+			case "sort_order":
+				return ec.fieldContext_BoardList_sort_order(ctx, field)
+			case "use_yn":
+				return ec.fieldContext_BoardList_use_yn(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_BoardList_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_BoardList_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_BoardList_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_BoardList_updatedBy(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BoardList", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createBoardList_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateBoardList(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateBoardList,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateBoardList(ctx, fc.Args["id"].(string), fc.Args["input"].(model.BoardListUpdateInput))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.directives.Authen == nil {
+					var zeroVal *model.BoardList
+					return zeroVal, errors.New("directive authen is not implemented")
+				}
+				return ec.directives.Authen(ctx, nil, directive0)
+			}
+
+			next = directive1
+			return next
+		},
+		ec.marshalOBoardList2ᚖtsvᚑgolangᚋinternalᚋgraphᚋmodelᚐBoardList,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateBoardList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_BoardList_id(ctx, field)
+			case "board_id":
+				return ec.fieldContext_BoardList_board_id(ctx, field)
+			case "name":
+				return ec.fieldContext_BoardList_name(ctx, field)
+			case "sort_order":
+				return ec.fieldContext_BoardList_sort_order(ctx, field)
+			case "use_yn":
+				return ec.fieldContext_BoardList_use_yn(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_BoardList_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_BoardList_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_BoardList_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_BoardList_updatedBy(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BoardList", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateBoardList_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBoardList(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBoardList,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBoardList(ctx, fc.Args["id"].(string))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.directives.Authen == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive authen is not implemented")
+				}
+				return ec.directives.Authen(ctx, nil, directive0)
+			}
+
+			next = directive1
+			return next
+		},
+		ec.marshalOString2ᚖstring,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBoardList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBoardList_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -1196,6 +1463,154 @@ func (ec *executionContext) fieldContext_Query_getBoardById(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_listBoardList(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Query_listBoardList,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Query().ListBoardList(ctx, fc.Args["request"].(*model.ListBoardListRequest))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.directives.Authen == nil {
+					var zeroVal []*model.BoardList
+					return zeroVal, errors.New("directive authen is not implemented")
+				}
+				return ec.directives.Authen(ctx, nil, directive0)
+			}
+
+			next = directive1
+			return next
+		},
+		ec.marshalOBoardList2ᚕᚖtsvᚑgolangᚋinternalᚋgraphᚋmodelᚐBoardList,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Query_listBoardList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_BoardList_id(ctx, field)
+			case "board_id":
+				return ec.fieldContext_BoardList_board_id(ctx, field)
+			case "name":
+				return ec.fieldContext_BoardList_name(ctx, field)
+			case "sort_order":
+				return ec.fieldContext_BoardList_sort_order(ctx, field)
+			case "use_yn":
+				return ec.fieldContext_BoardList_use_yn(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_BoardList_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_BoardList_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_BoardList_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_BoardList_updatedBy(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BoardList", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_listBoardList_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getBoardListById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Query_getBoardListById,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Query().GetBoardListByID(ctx, fc.Args["id"].(string))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.directives.Authen == nil {
+					var zeroVal *model.BoardList
+					return zeroVal, errors.New("directive authen is not implemented")
+				}
+				return ec.directives.Authen(ctx, nil, directive0)
+			}
+
+			next = directive1
+			return next
+		},
+		ec.marshalOBoardList2ᚖtsvᚑgolangᚋinternalᚋgraphᚋmodelᚐBoardList,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Query_getBoardListById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_BoardList_id(ctx, field)
+			case "board_id":
+				return ec.fieldContext_BoardList_board_id(ctx, field)
+			case "name":
+				return ec.fieldContext_BoardList_name(ctx, field)
+			case "sort_order":
+				return ec.fieldContext_BoardList_sort_order(ctx, field)
+			case "use_yn":
+				return ec.fieldContext_BoardList_use_yn(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_BoardList_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_BoardList_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_BoardList_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_BoardList_updatedBy(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BoardList", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getBoardListById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_listProject(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1706,6 +2121,18 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteBoard(ctx, field)
 			})
+		case "createBoardList":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createBoardList(ctx, field)
+			})
+		case "updateBoardList":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateBoardList(ctx, field)
+			})
+		case "deleteBoardList":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBoardList(ctx, field)
+			})
 		case "createProject":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createProject(ctx, field)
@@ -1805,6 +2232,44 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getBoardById(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "listBoardList":
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_listBoardList(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getBoardListById":
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getBoardListById(ctx, field)
 				return res
 			}
 

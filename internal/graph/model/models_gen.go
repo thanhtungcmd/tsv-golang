@@ -22,10 +22,38 @@ type BoardInput struct {
 	SortOrder   *int    `json:"sort_order,omitempty"`
 }
 
+type BoardList struct {
+	ID        string  `json:"id"`
+	BoardID   *string `json:"board_id,omitempty"`
+	Name      *string `json:"name,omitempty"`
+	SortOrder *int    `json:"sort_order,omitempty"`
+	UseYn     *int    `json:"use_yn,omitempty"`
+	CreatedAt *string `json:"createdAt,omitempty"`
+	UpdatedAt *string `json:"updatedAt,omitempty"`
+	CreatedBy *string `json:"createdBy,omitempty"`
+	UpdatedBy *string `json:"updatedBy,omitempty"`
+}
+
+type BoardListInput struct {
+	BoardID   string `json:"board_id"`
+	Name      string `json:"name"`
+	SortOrder *int   `json:"sort_order,omitempty"`
+}
+
+type BoardListUpdateInput struct {
+	Name      string `json:"name"`
+	SortOrder *int   `json:"sort_order,omitempty"`
+}
+
 type BoardUpdateInput struct {
 	Name        string  `json:"name"`
 	Description *string `json:"description,omitempty"`
 	SortOrder   *int    `json:"sort_order,omitempty"`
+}
+
+type ListBoardListRequest struct {
+	Limit  *int `json:"limit,omitempty"`
+	Offset *int `json:"offset,omitempty"`
 }
 
 type ListBoardRequest struct {

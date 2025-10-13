@@ -1,0 +1,43 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type BoardList {
+    id: String!
+    board_id: String
+    name: String
+    sort_order: Int
+    use_yn: Int
+    createdAt: String
+    updatedAt: String
+    createdBy: String
+    updatedBy: String
+}
+
+input BoardListInput {
+    board_id: String!
+    name: String! @validate(required: true, minLength: 4, maxLength: 50)
+    sort_order: Int
+}
+
+input BoardListUpdateInput {
+    name: String!
+    sort_order: Int
+}
+
+input ListBoardListRequest {
+    limit: Int
+    offset: Int
+}
+
+
+extend type Query {
+    listBoardList(request: ListBoardListRequest): [BoardList] @authen
+    getBoardListById(id: String!): BoardList @authen
+}
+
+extend type Mutation {
+    createBoardList(input: BoardListInput): BoardList @authen
+    updateBoardList(id: String!, input: BoardListUpdateInput!): BoardList @authen
+    deleteBoardList(id: String!): String @authen
+}
