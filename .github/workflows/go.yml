@@ -1,7 +1,4 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
-name: Go
+name: Go CI/CD - Balheh
 
 on:
   push:
@@ -28,8 +25,15 @@ jobs:
       - name: Download dependencies
         run: go mod tidy
 
-      - name: Build binary
-        run: go build -o build/app main.go
+      - name: Build static Linux binary
+        run: |
+          mkdir -p build
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+            -tags netgo \
+            -ldflags="-s -w -extldflags=-static" \
+            -o build/app main.go
+          echo "✅ Build complete."
+          file build/app
 
       - name: Upload Go binary artifact
         uses: actions/upload-artifact@v4
@@ -53,29 +57,25 @@ jobs:
           echo "${{ secrets.LIGHTSAIL_KEY_PEM }}" > /tmp/lightsail_key.pem
           chmod 600 /tmp/lightsail_key.pem
 
-      - name: Upload file Go binary
+      - name: Upload binary to Lightsail server
         run: |
           scp -i /tmp/lightsail_key.pem -o StrictHostKeyChecking=no build/app \
             ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}:/home/${{ secrets.LIGHTSAIL_USER }}/projects/backend/app
 
-      - name: SSH vào server và restart dịch vụ Go
+      - name: Restart backend container on Lightsail
         run: |
           ssh -o StrictHostKeyChecking=no -i /tmp/lightsail_key.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} << 'EOF'
             set -e
-            cd /home/${{ secrets.LIGHTSAIL_USER }}/projects/backend
-          
-            if pgrep app; then
-              echo "Stopping old app..."
-              pkill app || true
-              sleep 5
-            fi
-          
-            chmod +x app
-            echo "Starting new app..."
-            nohup ./app > app.log 2>&1 &
-          
-            echo "Deployment completed successfully."
+            cd /home/${{ secrets.LIGHTSAIL_USER }}/projects
+
+            echo "👉 Stopping old backend container..."
+            docker compose stop backend || true
+
+            echo "🔁 Restarting backend container..."
+            docker compose up -d --force-recreate backend
+
+            echo "✅ Deployment completed successfully."
           EOF
 
-      - name: Xoá SSH key tạm
+      - name: Remove temporary SSH key
         run: rm -f /tmp/lightsail_key.pem
