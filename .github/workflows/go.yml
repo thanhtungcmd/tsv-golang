@@ -31,6 +31,12 @@ jobs:
       - name: Build binary
         run: go build -o build/app main.go
 
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: go-app
+          path: build/app
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -50,7 +56,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i /tmp/lightsail_key.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} << 'EOF'
             set -e
-            cd /home/ubuntu/projects/backend
+            cd /home/${{ secrets.LIGHTSAIL_USER }}/projects/backend
   
             if pgrep app; then
               echo "Stopping old app..."
