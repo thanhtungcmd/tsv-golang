@@ -69,7 +69,7 @@ type ComplexityRoot struct {
 		CreateUser     func(childComplexity int, input model.UserInput) int
 		DeleteBoard    func(childComplexity int, id string) int
 		ForgetPassword func(childComplexity int, email string) int
-		UpdateBoard    func(childComplexity int, id string, input *model.BoardUpdateInput) int
+		UpdateBoard    func(childComplexity int, id string, input model.BoardUpdateInput) int
 		UpdateUser     func(childComplexity int, id string, input model.UserUpdateInput) int
 	}
 
@@ -264,7 +264,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateBoard(childComplexity, args["id"].(string), args["input"].(*model.BoardUpdateInput)), true
+		return e.complexity.Mutation.UpdateBoard(childComplexity, args["id"].(string), args["input"].(model.BoardUpdateInput)), true
 
 	case "Mutation.updateUser":
 		if e.complexity.Mutation.UpdateUser == nil {

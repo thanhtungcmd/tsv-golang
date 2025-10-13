@@ -18,7 +18,7 @@ import (
 
 type MutationResolver interface {
 	CreateBoard(ctx context.Context, input *model.BoardInput) (*model.Board, error)
-	UpdateBoard(ctx context.Context, id string, input *model.BoardUpdateInput) (*model.Board, error)
+	UpdateBoard(ctx context.Context, id string, input model.BoardUpdateInput) (*model.Board, error)
 	DeleteBoard(ctx context.Context, id string) (string, error)
 	ForgetPassword(ctx context.Context, email string) (*string, error)
 	ChangePassword(ctx context.Context, email string, verifyCode string, password string) (*string, error)
@@ -198,7 +198,7 @@ func (ec *executionContext) field_Mutation_updateBoard_args(ctx context.Context,
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOBoardUpdateInput2ᚖtsvᚑgolangᚋinternalᚋgraphᚋmodelᚐBoardUpdateInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNBoardUpdateInput2tsvᚑgolangᚋinternalᚋgraphᚋmodelᚐBoardUpdateInput)
 	if err != nil {
 		return nil, err
 	}
@@ -383,7 +383,7 @@ func (ec *executionContext) _Mutation_updateBoard(ctx context.Context, field gra
 		ec.fieldContext_Mutation_updateBoard,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBoard(ctx, fc.Args["id"].(string), fc.Args["input"].(*model.BoardUpdateInput))
+			return ec.resolvers.Mutation().UpdateBoard(ctx, fc.Args["id"].(string), fc.Args["input"].(model.BoardUpdateInput))
 		},
 		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
 			directive0 := next

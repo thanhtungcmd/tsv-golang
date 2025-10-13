@@ -17,8 +17,9 @@ func (r *mutationResolver) CreateBoard(ctx context.Context, input *model.BoardIn
 }
 
 // UpdateBoard is the resolver for the updateBoard field.
-func (r *mutationResolver) UpdateBoard(ctx context.Context, id string, input *model.BoardUpdateInput) (*model.Board, error) {
-	panic(fmt.Errorf("not implemented: UpdateBoard - updateBoard"))
+func (r *mutationResolver) UpdateBoard(ctx context.Context, id string, input model.BoardUpdateInput) (*model.Board, error) {
+	userLogin := ctx.Value("userLogin").(string)
+	return r.Service.BoardService.UpdateBoard(userLogin, id, input)
 }
 
 // DeleteBoard is the resolver for the deleteBoard field.

@@ -50,7 +50,7 @@ func (repo BoardRepository) GetList(param *model.ListBoardRequest) []*model.Boar
 			query.Offset(*param.Offset).Limit(*param.Limit)
 		}
 	}
-	query.Order("updated_at desc")
+	query.Order("updated_at, sort_order desc")
 	query = query.Find(&result)
 	return result
 }

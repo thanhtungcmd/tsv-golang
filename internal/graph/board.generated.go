@@ -325,7 +325,7 @@ func (ec *executionContext) unmarshalInputBoardInput(ctx context.Context, obj an
 					var zeroVal string
 					return zeroVal, err
 				}
-				minLength, err := ec.unmarshalOInt2ᚖint(ctx, 8)
+				minLength, err := ec.unmarshalOInt2ᚖint(ctx, 4)
 				if err != nil {
 					var zeroVal string
 					return zeroVal, err
@@ -514,6 +514,11 @@ func (ec *executionContext) _Board(ctx context.Context, sel ast.SelectionSet, ob
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) unmarshalNBoardUpdateInput2tsvᚑgolangᚋinternalᚋgraphᚋmodelᚐBoardUpdateInput(ctx context.Context, v any) (model.BoardUpdateInput, error) {
+	res, err := ec.unmarshalInputBoardUpdateInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalOBoard2ᚕᚖtsvᚑgolangᚋinternalᚋgraphᚋmodelᚐBoard(ctx context.Context, sel ast.SelectionSet, v []*model.Board) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -567,14 +572,6 @@ func (ec *executionContext) unmarshalOBoardInput2ᚖtsvᚑgolangᚋinternalᚋgr
 		return nil, nil
 	}
 	res, err := ec.unmarshalInputBoardInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalOBoardUpdateInput2ᚖtsvᚑgolangᚋinternalᚋgraphᚋmodelᚐBoardUpdateInput(ctx context.Context, v any) (*model.BoardUpdateInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputBoardUpdateInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 

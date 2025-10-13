@@ -14,6 +14,8 @@ type BoardService struct {
 
 type BoardServiceInterface interface {
 	CreateBoard(userLogin string, input *model.BoardInput) (*model.Board, error)
+	UpdateBoard(userLogin string, id string, input model.BoardUpdateInput) (*model.Board, error)
+	DeleteBoard(userLogin string, id string) error
 }
 
 func BoardServiceInit(repo *repository.Repositories) *BoardService {
@@ -35,6 +37,30 @@ func (r *BoardService) CreateBoard(userLogin string, input *model.BoardInput) (*
 	result.UpdatedAt = &timeNow
 	result.CreatedBy = &userLogin
 	result.UpdatedBy = &userLogin
-	
+	result, err = r.repo.Board.CreateAndReturn(result)
+	if err != nil {
+		return nil, err
+	}
 	return result, nil
+}
+
+func (r *BoardService) UpdateBoard(userLogin string, id string, input model.BoardUpdateInput) (*model.Board, error) {
+	data := r.repo.Board.FindById(id)
+	err := mapstructure.Decode(input, &data)
+	if err != nil {
+		return nil, err
+	}
+	timeNow := datetime.Datetime().TimeNow().ToString()
+	data.UpdatedAt = &timeNow
+	data.UpdatedBy = &userLogin
+	err = r.repo.Board.UpdateByConditions(id, *data, []string{"name", "description", "sort_order"}...)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func (r *BoardService) DeleteBoard(userLogin string, id string) error {
+	//TODO implement me
+	panic("implement me")
 }
