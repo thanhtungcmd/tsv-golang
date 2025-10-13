@@ -31,39 +31,39 @@ jobs:
       - name: Build binary
         run: go build -o build/app main.go
 
-deploy:
-  runs-on: ubuntu-latest
-  needs: build
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
 
-  steps:
-    - name: Save SSH KEY
-      run: |
-        echo "${{ secrets.LIGHTSAIL_KEY_PEM }}" > /tmp/lightsail_key.pem
-        chmod 600 /tmp/lightsail_key.pem
+    steps:
+      - name: Save SSH KEY
+        run: |
+          echo "${{ secrets.LIGHTSAIL_KEY_PEM }}" > /tmp/lightsail_key.pem
+          chmod 600 /tmp/lightsail_key.pem
 
-    - name: Upload file Go binary
-      run: |
-        scp -i /tmp/lightsail_key.pem -o StrictHostKeyChecking=no build/app \
-          ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}:/home/${{ secrets.LIGHTSAIL_USER }}/projects/backend/app
+      - name: Upload file Go binary
+        run: |
+          scp -i /tmp/lightsail_key.pem -o StrictHostKeyChecking=no build/app \
+            ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}:/home/${{ secrets.LIGHTSAIL_USER }}/projects/backend/app
 
-    - name: SSH vào server và restart dịch vụ Go
-      run: |
-        ssh -o StrictHostKeyChecking=no -i /tmp/lightsail_key.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} << 'EOF'
-          set -e
-          cd /home/ubuntu/projects/backend
+      - name: SSH vào server và restart dịch vụ Go
+        run: |
+          ssh -o StrictHostKeyChecking=no -i /tmp/lightsail_key.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} << 'EOF'
+            set -e
+            cd /home/ubuntu/projects/backend
+  
+            if pgrep app; then
+              echo "Stopping old app..."
+              pkill app || true
+              sleep 5
+            fi
+  
+            chmod +x app
+            echo "Starting new app..."
+            nohup ./app > app.log 2>&1 &
+  
+            echo "Deployment completed successfully."
+          EOF
 
-          if pgrep app; then
-            echo "Stopping old app..."
-            pkill app || true
-            sleep 5
-          fi
-
-          chmod +x app
-          echo "Starting new app..."
-          nohup ./app > app.log 2>&1 &
-
-          echo "Deployment completed successfully."
-        EOF
-
-    - name: Xoá SSH key tạm
-      run: rm -f /tmp/lightsail_key.pem
+      - name: Xoá SSH key tạm
+        run: rm -f /tmp/lightsail_key.pem
